@@ -1,0 +1,5 @@
+<?php
+require "../config/db.php";
+
+mysqli_query($conn, "DROP DATABASE IF EXISTS `$db_name`");
+echo "database dropped";

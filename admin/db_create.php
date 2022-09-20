@@ -1,9 +1,5 @@
 <?php
-$db_name = 'yt_notes';
-$db_host = 'localhost';
-$db_user = 'root';
-$db_pass = '';
-$conn = mysqli_connect($db_host, $db_user, $db_pass);
+require "../config/db.php";
 
 mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS $db_name;");
 mysqli_select_db($conn, $db_name);
