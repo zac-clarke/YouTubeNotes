@@ -1,8 +1,9 @@
 <?php
 $conn = mysqli_connect("localhost", "root", "");
+$db_name = "yt_notes";
 
-mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS yt_notes;");
-mysqli_select_db($conn, "yt_notes");
+mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS $db_name;");
+mysqli_select_db($conn, $db_name);
 
 //Create TABLES
 mysqli_query($conn, "CREATE TABLE IF NOT EXISTS `users` (
