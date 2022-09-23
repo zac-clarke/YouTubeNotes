@@ -1,10 +1,7 @@
 <?php
-session_start();
-require "config/db-pdo.php";
-if(isset($_SESSION['username'])){
-    $username = $_SESSION['username'];
+require_once "config/db-pdo.php";
+require_once ("incl/logic/auth.php");
 
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,13 +27,12 @@ if(isset($_SESSION['username'])){
                 <!-- NAV -->
                 <nav class="nav nav-masthead justify-content-center float-md-end">
                     
-                    <?php if (!isset($_SESSION['username'])) : ?>
+                    <?php if (!$loggedin) : ?>
                         <a class="nav-link btn fw-bold py-1 px-1" href="#" data-bs-toggle="modal" data-bs-target="#login">Login</a>
-                        <a class="nav-link fw-bold py-1 px-1" href="#">Signup</a>
-                        <?php include "incl/parts/login.php" ?>
+                        <a class="nav-link btn fw-bold py-1 px-1" href="#" data-bs-toggle="modal" data-bs-target="#signup">Signup</a>
                     <?php else : ?>
                         <a class="nav-link fw-bold py-1 px-1 active" aria-current="page" href="dashboard.php">Dashboard</a>
-                        <a class="nav-link fw-bold py-1 px-1" href="incl/php/logout.php">Logout</a>
+                        <a class="nav-link fw-bold py-1 px-1" href="incl/logic/logout.php">Logout</a>
                     <?php endif ?>
                 </nav>
             </div>

@@ -1,7 +1,7 @@
 <!-- Modal -->
-<?php require_once "incl/logic/login.php"; ?>
+<?php require_once "incl/logic/signup.php"; ?>
 
-<div class="modal fade" id="login" tabindex="-1" aria-labelledby="LoginPopup" aria-hidden="true">
+<div class="modal fade" id="signup" tabindex="-1" aria-labelledby="SignupPopup" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -9,10 +9,10 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <h3 class="text-dark">Login</h3>
+        <h3 class="text-dark">Signup</h3>
         <p class="text-dark">No db connection yet so just type whatever username for now.</p>
 
-
+        <p class="text-dark">Change code, this is the login code</p>
 
 
         <form action="index.php" method="POST">
