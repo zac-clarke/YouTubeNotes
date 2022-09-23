@@ -17,7 +17,8 @@
 
         <form action="index.php" method="POST">
           <div class="input-group ">
-            <input type="text" name="username" class="form-control" placeholder="Username">
+            <input type="hidden" name="login">
+            <input type="text" name="username" class="form-control" placeholder="Username" value="<?= isset($_POST['username']) ? $_POST['username']: '' ?>">
             <input type="password" name="password" class="form-control" placeholder="Password">
             <input type="submit" name="submit" class="btn btn-primary" onclick="" value="Login"></input>
           </div>
@@ -33,3 +34,12 @@
     </div>
   </div>
 </div>
+
+<?php if (isset($_POST['login'])) : ?>
+  <script defer>
+    $(document).ready(function() {
+      $("#login").modal('show');
+    });
+  </script>
+
+<?php endif;
