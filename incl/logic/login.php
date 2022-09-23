@@ -15,7 +15,7 @@ $temp_user = [
 //temp logic, later has to be based on db
     if ($user == $temp_user["username"] && $password == $temp_user["password"]) {
         //sucessful login
-        $_SESSION['username'] = $user;
+        $_SESSION['username'] = $temp_user["username"];
         $_SESSION['user_id'] = $temp_user["user_id"];
         header('location: index.php');
     } 
