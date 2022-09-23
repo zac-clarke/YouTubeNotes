@@ -1,6 +1,8 @@
 <!-- Modal -->
 <?php require_once "incl/logic/login.php"; ?>
 
+
+
 <div class="modal fade" id="login" tabindex="-1" aria-labelledby="LoginPopup" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -10,7 +12,9 @@
       </div>
       <div class="modal-body">
         <h3 class="text-dark">Login</h3>
-        <p class="text-dark">No db connection yet so just type whatever username for now.</p>
+        <?php if(isset($_POST['login'])):?>
+        <p class="text-danger">Incorrect username or password</p>
+        <?php endif ?>
 
 
 
@@ -18,7 +22,7 @@
         <form action="index.php" method="POST">
           <div class="input-group ">
             <input type="hidden" name="login">
-            <input type="text" name="username" class="form-control" placeholder="Username" value="<?= isset($_POST['username']) ? $_POST['username']: '' ?>">
+            <input type="text" name="username" class="form-control" placeholder="Username" value="<?= isset($_POST['username']) ? $_POST['username'] : '' ?>">
             <input type="password" name="password" class="form-control" placeholder="Password">
             <input type="submit" name="submit" class="btn btn-primary" onclick="" value="Login"></input>
           </div>
@@ -35,11 +39,4 @@
   </div>
 </div>
 
-<?php if (isset($_POST['login'])) : ?>
-  <script defer>
-    $(document).ready(function() {
-      $("#login").modal('show');
-    });
-  </script>
 
-<?php endif;
