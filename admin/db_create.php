@@ -35,7 +35,8 @@ if (!mysqli_query($conn, $create_tbl_videos)) {
 $create_tbl_notes = "CREATE TABLE IF NOT EXISTS `notes` (
     id int AUTO_INCREMENT NOT NULL,
     videoid int NOT NULL,
-    note TEXT NOT NULL,
+    title TEXT NOT NULL,
+    note TEXT NULL,
     timestamp float NOT NULL,
     trn_date DATETIME NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     CONSTRAINT pk_notes_id PRIMARY KEY (id asc),
