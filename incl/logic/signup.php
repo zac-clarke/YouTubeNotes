@@ -38,9 +38,8 @@ function ValidateForm()
         } else {
             $password_error = "";
             $password = sanitize($_POST["password"]);
-            if (!preg_match("/.*?/", $password)) {
-                $password_error = "The password should be at least 10 chars and include exactly one special
-                    character, one uppercase letter and one digit";
+            if (!preg_match("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$^", $password)) {
+                $password_error = "The password must contain at least: one uppercase and one lowercase letter, one number, and 1 speacial character";
                 $isValid = false;
             }
         }
@@ -91,7 +90,7 @@ if ($isValid) {
     } catch (Exception $e) {
         if ($e->getCode() == 1062) {
             if (str_contains($e->getMessage(), "username")) {
-                $username_error = "this username is already taken";
+                $username_error = "this username is already taken";               
             }else if (str_contains($e->getMessage(), "email")) {
                 $email_error = "this email is already taken";
             }
