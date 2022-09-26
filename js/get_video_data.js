@@ -1,8 +1,11 @@
-document.querySelectorAll(".btn_add_video").forEach((element) => {
+
+document.querySelectorAll("#btn_add_video, .btn.edit_video").forEach((element) => {
   element.addEventListener("click", async function (event) {
 
+console.log(element);
     let data_id = event.target.getAttribute("data-id");
 
+    //form input in the add-edit modal
     let id = document.getElementById("video_id");
     let url = document.getElementById("video_url");
     let title = document.getElementById("video_title");
@@ -15,7 +18,7 @@ document.querySelectorAll(".btn_add_video").forEach((element) => {
       let response = await fetch(`/YouTubeNotes/api/videos.php?id=${data_id}`);
       let data = await response.json();
 
-      //set data
+      //set data as value for form inputs
       url.value = data.url;
       title.value = data.title;
       id.value = data_id;
@@ -38,7 +41,7 @@ document.querySelectorAll(".btn_add_video").forEach((element) => {
 
 //trying to reset modal validation on close, but it resets on reload too
 
-// document.querySelector('.modal').addEventListener('hidden.bs.modal', event => {
-//     document.getElementById("video_url").classList.remove("is-invalid");
-//     document.getElementById("video_title").classList.remove("is-invalid");
-// })
+document.querySelector('.modal').addEventListener('hidden.bs.modal', event => {
+    document.getElementById("video_url").classList.remove("is-invalid");
+    document.getElementById("video_title").classList.remove("is-invalid");
+})

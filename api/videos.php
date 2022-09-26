@@ -4,7 +4,13 @@ use LDAP\Result;
 
 require('../config/db.php');
 require('../incl/logic/auth.php');
-//needs authentification
+
+//restrict access
+if (!$loggedin) {
+  http_response_code(401);
+  die;
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
@@ -23,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       echo json_encode(['url' => $url, 'title' => $title]);
     }
   } else {
-
+    // not using this currently
     $qry = "SELECT id, url, title FROM videos WHERE userid=?";
     $stmt = mysqli_prepare($conn, $qry);
     mysqli_stmt_bind_param($stmt, "i", $_SESSION['user_id']);
@@ -31,7 +37,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $result = mysqli_stmt_get_result($stmt);
     $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
     echo json_encode($data);
-
   }
 }
-

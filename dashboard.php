@@ -1,7 +1,8 @@
 <?php require "incl/parts/header.php";
    
-if (!isset($_SESSION['username'])) {
+if (!$loggedin) {
     header('location: index.php');
+    exit;
 }
 
 
@@ -18,7 +19,7 @@ if (!isset($_SESSION['username'])) {
         <p class="pt-5">Do you want to add a video?</p>
 
         <!-- Button trigger modal -->
-        <button type="button" id="btn_add_video" class="btn_add_video btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-video-modal">
+        <button type="button" id="btn_add_video" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-video-modal">
             Add a new Video
         </button>
 
@@ -27,7 +28,8 @@ if (!isset($_SESSION['username'])) {
     </div>
     <div class="container my-5">
         <h2>Your Collection</h2>
-        <?php require_once "incl/parts/video-collection.php"; ?>
+        <?php require_once "incl/parts/get-videos.php"; ?>
+  
         <script defer src="js/get_video_data.js"></script>
     </div>
 

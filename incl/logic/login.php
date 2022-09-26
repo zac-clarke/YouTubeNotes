@@ -46,6 +46,8 @@ if (isset($_POST['submit'])) {
                 ];
 
                 //save used data to session 
+                //TODO : set session timeout (ex: 30 min) and extend that every time tehre is a request
+                //reference: https://stackoverflow.com/questions/520237/how-do-i-expire-a-php-session-after-30-minutes
                 $_SESSION['user'] =  $user;
                 $_SESSION['username'] = $user["username"];
                 $_SESSION['user_id'] = $user["user_id"];
