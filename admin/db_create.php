@@ -1,5 +1,5 @@
 <?php
-require "../config/db.php";
+require "db.php";
 
 mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS $db_name;");
 mysqli_select_db($conn, $db_name);

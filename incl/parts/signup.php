@@ -10,17 +10,39 @@
       </div>
       <div class="modal-body">
         <h3 class="text-dark">Signup</h3>
-        <p class="text-dark">No db connection yet so just type whatever username for now.</p>
-
-        <p class="text-dark">Change code, this is the login code</p>
+        <p class="text-dark">Get started with our YouTube study aid!</p>
 
 
-        <form action="index.php" method="POST">
-          <div class="input-group ">
-            <input type="text" name="username" class="form-control" placeholder="Username">
-            <input type="password" name="password" class="form-control" placeholder="Password">
-            <input type="submit" name="submit" class="btn btn-primary" onclick="" value="Login"></input>
-          </div>
+
+
+        <form class = "was-validated" action="index.php" method="POST" >
+          
+            <input type="hidden" name="signup">
+            <div class="form-group ">
+              <input type="text" name="username" class="form-control is-invalid" placeholder="Username" required>
+              <div class = "valid-feedback">
+                Valid Username
+              </div>
+              <p class="text-danger"><?= $username_error ?></p>
+            </div>
+            <div class="form-group ">
+              <input type="email" name="email" class="form-control is-invalid" placeholder="Email" required>
+              <div class = "valid-feedback">
+                Valid email
+              </div>
+              <p class="text-danger"><?= $email_error ?></p>
+            </div>
+            <div class="form-group ">
+              <input type="password" name="password" class="form-control is-invalid" placeholder="Password" required>
+              <div class = "valid-feedback">
+                Valid Password
+              </div>
+              <p class="text-danger"><?= $password_error ?></p>
+            </div>
+            <div class="form-group ">
+              <input type="submit" name="submit" class="btn btn-primary" onclick="" value="Sign Up"></input>
+            </div>
+          
         </form>
 
 
