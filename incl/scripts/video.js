@@ -9,7 +9,6 @@ $('#modalNote').on('shown.bs.modal', onModalNoteShow);
 $('#btn-submit').on('click', addNoteToDb);
 showYoutubePlayer();
 getNotesFromDb();
-
 /**
  * EventListener for when modalNote is shown
  */
@@ -62,6 +61,11 @@ function addNoteToDb() {
                 addNoteBox(note);
                 $('#modalNote').modal('hide');
                 document.getElementById('note' + note.id).scrollIntoView();
+                $('#modalNote input, #modalNote textarea').each(function () {
+                    $(this)
+                        .val('')
+                        .removeClass('is-valid');
+                });
             },
             complete: function () {
                 title.prop('disabled', false)
@@ -84,13 +88,13 @@ function getNotesFromDb() {
         error: function (xhr) {
             // "responseText": "{"error": "Missing Parameters"}"
             // "status": 422
-            $('#notes').addClass('text-danger').html('<h2>An error occured while loading the Notes for this video</h2>')
+            $('#notes').html('<h2 class="text-danger">An error occured while loading the Notes for this video</h2>')
         },
         success: function (/** @type {String} */data, textStatus, xhr) {
             if (xhr.status == 204)
-                return $('#notes').addClass('text-danger').html('<h4>No notes found!<br>Click the button above to add one.</h4>')
+                return $('#notes').html('<h4 class="text-danger">No notes found!<br>Click the button above to add one.</h4>')
 
-            // Convert to Hashmap instead
+            // TODO: Convert to Hashmap instead
 
             JSON.parse(data)["notes"].forEach(note => {
                 notes[note.id] = note
@@ -115,7 +119,7 @@ function addNoteBox(note) {
             <h4>${note.title}</h4>
             ${convertSecondsToString(note.timestamp)} &nbsp; | &nbsp; ${note.trn_date}<br>
             ${note.note}<br>
-            <a class="btn text-info" onclick="player.seekTo(${note.timestamp});"><i class="fa-solid fa-play"></i></a>
+            <a class="btn text-info" onclick="player.seekTo(${note.timestamp}); player.playVideo();"><i class="fa-solid fa-play"></i></a>
             <a class="btn text-warning"><i class="fa-solid fa-pen"></i></a>
             <a class="btn text-danger" onclick="deleteNoteBox(${note.id})"><i class="fa-solid fa-trash-can"></i></a>
         </div>`;
@@ -218,8 +222,8 @@ function onYouTubeIframeAPIReady() {
         videoid = url.searchParams.get("v");
     } catch (e) { }
     player = new YT.Player('player', {
-        height: window.screen.height * 0.6,
-        width: window.screen.width * 0.9,
+        height: window.screen.height * 0.55,
+        width: window.screen.width * 0.7,
         videoId: videoid,
         playerVars: {
             'playsinline': 1
@@ -232,6 +236,7 @@ function onYouTubeIframeAPIReady() {
 }
 
 var shouldPause = false;
+var isFullscreen = false;
 /**
  * The API will call this function when the video player is ready.
  * @param {*} event 
@@ -242,6 +247,13 @@ function onPlayerReady(event) {
         player.seekTo(curTime);
         shouldPause = true;
     }
+
+    console.log(player.g.onfullscreenchange = (e) => {
+        isFullscreen = !isFullscreen
+
+        // console.log(e);
+        // console.log(player);
+    });
 }
 
 
@@ -268,3 +280,4 @@ function pauseVideo() {
 function stopVideo() {
     player.stopVideo();
 }
+
