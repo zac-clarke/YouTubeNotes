@@ -16,7 +16,7 @@ if (mysqli_stmt_num_rows($stmt) > 0) {
             'yt_id' => $yt_id,
             'url' => $url,
             'title' => $title
-            //TODO : ADD video_ytid
+            
         ];
         array_push($videos, $video);
     }

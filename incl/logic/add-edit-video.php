@@ -16,8 +16,6 @@ function extract_id($pattern, $uri)
   $pattern = "{" . $pattern . "}";
   if (preg_match($pattern, $uri, $matches)) {
     return preg_replace($pattern, '$1', $uri);
-  } else {
-    return 0;
   }
 }
 
@@ -29,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $video_url = $video_title = ""; //
   $video_url_error = $video_title_error  = "";
   $valid = true;
-  
+
 
   //if the form was submited
   if (isset($_POST['submit'])) {
@@ -43,10 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $valid = false;
     } else {
       $video_ytid = extract_id(VIDEO_URL_REGEX, "$video_url");
-      $video_ytid= sanitize($video_ytid);
+      $video_ytid = sanitize($video_ytid);
       if (!$video_ytid) {
         $valid = false;
-      } 
+      }
     }
 
     if (empty($video_title) || strlen($video_title) > VIDEO_TITLE_MAX) {
@@ -68,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $video_url_error = $video_title_error  = "";
         $qry = "INSERT INTO videos (userid, yt_id, url, title) VALUES (?,?,?,?)";
         $stmt = mysqli_prepare($conn, $qry);
-        mysqli_stmt_bind_param($stmt, "isss", $_SESSION['user_id'],$video_ytid, $video_url, $video_title);
+        mysqli_stmt_bind_param($stmt, "isss", $_SESSION['user_id'], $video_ytid, $video_url, $video_title);
         mysqli_stmt_execute($stmt) or die("Server error : add video failed");
       }
 
