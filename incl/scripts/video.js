@@ -3,19 +3,30 @@ var player;
 var curTime = 0;
 
 disableFormSubmission();
-document.getElementById('addNoteModal').addEventListener('shown.bs.modal', onAddNoteModalShow);
+document.getElementById('modalNote').addEventListener('shown.bs.modal', onModalNoteShow);
 showYoutubePlayer();
 
 
 /**
- * EventListener for when AddNoteModal is shown
+ * EventListener for when modalNote is shown
  */
-function onAddNoteModalShow() {
+function onModalNoteShow() {
     pauseVideo();
-    let addNoteModal = document.getElementById('addNoteModal');
-    let form = addNoteModal.querySelector('form');
+    let modalNote = document.getElementById('modalNote');
+    let form = modalNote.querySelector('form');
     let curTimestamp = player.getCurrentTime();
     form.querySelector('input[name="timestamp"]').value = curTimestamp;
+    let modalTitle = document.getElementById('modalNoteLabel');
+    modalTitle.textContent = 'Add Note @' + convertSecondsToString(curTimestamp);
+    form.querySelectorAll('input, textarea').forEach(input => input.addEventListener('input', () => {
+        if (input.checkValidity()) {
+            input.classList.add("is-valid")
+            input.classList.remove("is-invalid")
+        } else {
+            input.classList.add("is-invalid")
+            input.classList.remove("is-valid")
+        }
+    }));
     // TODO: Maybe empty note field if timestamp different from last time user opened Modal
 }
 

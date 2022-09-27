@@ -1,6 +1,6 @@
 <?php
 try {
-    if(!$loggedin) {
+    if (!$loggedin) {
         header("location: index.php");
     } else if (!empty($_REQUEST['videoid'])) {
         $videoid = $_REQUEST['videoid']; // get videoid from request
@@ -20,7 +20,7 @@ try {
  */
 function loadPage($video)
 { ?>
-    <script src='incl/js/notes.js' defer></script>
+    <script src='incl/scripts/video.js' defer></script>
 <?php
     $regex_timestamp = '(^\d*$)|(^\d*(:[0-5]?[0-9]){1,2}$)';
     loadVideoSection($video); // load video section (up to Add Note button)
@@ -34,13 +34,12 @@ function loadPage($video)
  */
 function getVideoInfo($videoid)
 {
+    //TODO: Move this to Julieta's video api
     global $pdo;
     $stmt = $pdo->prepare("SELECT * FROM videos WHERE id=?;"); // get the current video from DB
-    $stmt->execute([$videoid]);
-    if (!$stmt->rowCount()) // No video found in DB
-        throw new Exception();
-    else
+    if ($stmt->execute([$videoid]) && $stmt->rowCount())
         return $stmt->fetchObject(); // Video found
+    else
+        throw new Exception(); // No video found in DB
 }
 ?>
-

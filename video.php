@@ -1,22 +1,19 @@
 <?php
 require("incl/parts/header.php");
-require("incl/logic/video.php"); // The main logic behind the Notes page 
+require("incl/logic/video.php"); // The main logic behind the Notes page
 ?>
 
 <!-- Modal for the 'Add Note' button -->
-<div class="modal fade text-dark" id="addNoteModal" tabindex="-1" aria-labelledby="addNoteModalLabel" aria-hidden="true">
+<div class="modal fade text-dark" id="modalNote" tabindex="-1" aria-labelledby="modalNoteLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addNoteModalLabel">Add Note</h5>
+                <h5 class="modal-title" id="modalNoteLabel">Add Note</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="form-add-note" class="needs-validation" method="POST" action="<?= $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ?>" novalidate>
-                    <div class="mb-4">
-                        <label for="timestamp" class="form-label">Timestamp</label>
-                        <input type="text" class="form-control" name="timestamp">
-                    </div>
+                <form id="form-add-note" class="needs-validation" novalidate>
+                    <input type="hidden" class="form-control" name="timestamp">
                     <div class="mb-4">
                         <label for="title" class="form-label">Title</label>
                         <input type="text" class="form-control" name="title" maxlength="256" required>
@@ -32,18 +29,16 @@ require("incl/logic/video.php"); // The main logic behind the Notes page
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" form="form-add-note" class="btn btn-primary">Add</button>
+                <button type="button" id="btn-submit" class="btn btn-primary">Add</button>
             </div>
         </div>
     </div>
 </div>
 
-
-
-<!-- 
+<!--
  --
  -- The remainder of this file contains functions used in this file or in the logic/notes.php file
- -- 
+ --
  -->
 
 <?php
@@ -75,7 +70,7 @@ function loadVideoSection($video)
             <div id="test"></div>
             <div id="player" data-url="<?= $video->url ?>" data-timestamp="<?= (!empty($_REQUEST['timestamp'])) ? $_REQUEST['timestamp'] : 0 ?>"></div>
         </div>
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNoteModal" title="Pauses the video and adds a note at the current timestamp">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNote" title="Pauses the video and adds a note at the current timestamp">
             Add Note
         </button>
     </div>
@@ -84,9 +79,12 @@ function loadVideoSection($video)
 
 function loadNotesSection($video)
 { ?>
-    <div class="container d-flex bd-highlight">
+    <div class="container d-flex">
         <span class="h2 flex-grow-1">Your Notes</span>
         <span class="d-none">TODO: Order by: Timestamp | date</span>
+    </div>
+    <div id="notes" class="container">
+
     </div>
 <?php
 }
