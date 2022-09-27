@@ -3,7 +3,9 @@
 $username = $password = "";
 $username_error = $password_error = $auth_error = "";
 $valid = true;
+
 if (isset($_POST['submit'])) {
+   
     require_once ("incl/logic/sanitize.php");
 
     //get input values
