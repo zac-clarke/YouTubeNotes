@@ -3,7 +3,7 @@ require("incl/parts/header.php");
 require("incl/logic/video.php"); // The main logic behind the Notes page
 ?>
 
-<!-- Modal for the 'Add Note' button -->
+<!-- Modal for the 'Notes' button -->
 <div class="modal fade text-dark" id="modalNote" tabindex="-1" aria-labelledby="modalNoteLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
@@ -12,7 +12,7 @@ require("incl/logic/video.php"); // The main logic behind the Notes page
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="form-add-note" class="needs-validation" novalidate>
+                <form id="form-note" class="needs-validation" novalidate>
                     <input type="hidden" class="form-control" name="timestamp">
                     <div class="mb-4">
                         <label for="title" class="form-label">Title</label>
@@ -84,7 +84,6 @@ function loadNotesSection($video)
         <span class="d-none">TODO: Order by: Timestamp | date</span>
     </div>
     <div id="notes" class="container">
-
     </div>
 <?php
 }

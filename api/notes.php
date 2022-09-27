@@ -1,4 +1,5 @@
 <?php
+// Requiring pdo and auth again.. in case we want to use postman to use the api
 require_once("../config/db-pdo.php");
 require_once("../incl/logic/auth.php");
 $response = array();
@@ -15,7 +16,7 @@ try {
                 throw new Exception('Missing Parameters', 422);
             break;
         case 'POST':
-            if (empty($_REQUEST['videoid']) || empty($_REQUEST['title']) || empty($_REQUEST['timestamp']))
+            if (empty($_REQUEST['videoid']) || empty($_REQUEST['title']) || !isset($_REQUEST['timestamp']))
                 throw new Exception('Missing Parameters', 422);
             else
                 $response["note"] = addNoteToDb($_REQUEST['videoid'], $_REQUEST['title'], $_REQUEST['note'], $_REQUEST['timestamp']);
@@ -30,11 +31,11 @@ try {
             if (!empty($_REQUEST['id']))
                 $response["success"] = deleteNoteFromDb($_REQUEST['id']);
             else
-                throw new Exception('Missing Parameters', 422);
+                throw new Exception(json_encode($_SERVER) . 'Missing Parameters', 422);
             break;
     }
 } catch (Exception $e) {
-    if (preg_match("/[A-z]/", $e->getCode())) {
+    if (preg_match("/[A-z]/", $e->getCode())) { // if the error code has a letter in it, it was sent by the DB
         http_response_code(400);
         $response["error"] = $e->getCode() . ": " . $e->getMessage();
     } else {
@@ -100,8 +101,8 @@ function deleteNoteFromDb($id)
 {
     global $pdo;
     $stmt = $pdo->prepare("DELETE FROM notes WHERE id=?;");
-    if ($stmt->execute([$id]) && $stmt->rowCount())
-        return $stmt->fetchObject();
+    if ($stmt->execute([$id]))
+        return $stmt->rowCount();
     else
         throw new Exception('No Notes found', 204);
 }
