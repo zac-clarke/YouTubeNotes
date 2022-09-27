@@ -3,7 +3,6 @@ require_once("../config/db-pdo.php");
 require_once("../incl/logic/auth.php");
 $response = array();
 try {
-    global $response;
     if (!$loggedin)
         throw new Exception('Unauthorized!', 401);
     switch ($_SERVER['REQUEST_METHOD']) { // Check which request method was used. Get/Post/Put/Delete/...
