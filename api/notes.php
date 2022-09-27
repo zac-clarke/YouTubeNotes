@@ -72,7 +72,7 @@ function getNotesFromDb($videoid)
     $stmt = $pdo->prepare("SELECT * FROM notes WHERE videoid=?;");
 
     if ($stmt->execute([$videoid]) && $stmt->rowCount())
-        return $stmt->fetchAll(PDO::FETCH_OBJ);
+        return $stmt->fetchAll();
     else
         throw new Exception('No Notes found', 204);
 }

@@ -43,6 +43,7 @@ function addNoteToDb() {
             method: 'POST',
             url: '../api/notes.php',
             data: { videoid: videoid, title: title.val(), note: note.val(), timestamp: timestamp.val() },
+            timeout: 10000,
             beforeSend: function () {
                 title.prop('disabled', true)
                 note.prop('disabled', true)
@@ -51,16 +52,13 @@ function addNoteToDb() {
             error: function (xhr) {
                 // "responseText": "{"error": "Missing Parameters"}"
                 // "status": 422
-                isAdding = false;
                 alert(JSON.stringify(xhr))
                 //$('#notes').addClass('text-danger').html('<h2>An error occured while loading the Notes for this video</h2>')
             },
             success: function (/** @type {String} */data, textStatus, xhr) {
-                isAdding = false;
                 let note = JSON.parse(data)["note"];
                 addNoteBox(note);
                 $('#modalNote').modal('hide');
-                document.getElementById('note' + note.id).scrollIntoView();
                 $('#modalNote input, #modalNote textarea').each(function () {
                     $(this)
                         .val('')
@@ -68,6 +66,7 @@ function addNoteToDb() {
                 });
             },
             complete: function () {
+                isAdding = false;
                 title.prop('disabled', false)
                 note.prop('disabled', false)
                 timestamp.prop('disabled', false)
@@ -92,7 +91,7 @@ function getNotesFromDb() {
         },
         success: function (/** @type {String} */data, textStatus, xhr) {
             if (xhr.status == 204)
-                return $('#notes').html('<h4 class="text-danger">No notes found!<br>Click the button above to add one.</h4>')
+                return $('#notes').html('<h4 class="text-danger">You don\'t have any notes yet!<br>Click the button above to add one.</h4>')
 
             // TODO: Convert to Hashmap instead
 
@@ -120,7 +119,7 @@ function addNoteBox(note) {
             ${convertSecondsToString(note.timestamp)} &nbsp; | &nbsp; ${note.trn_date}<br>
             ${note.note}<br>
             <a class="btn text-info" onclick="player.seekTo(${note.timestamp}); player.playVideo();"><i class="fa-solid fa-play"></i></a>
-            <a class="btn text-warning"><i class="fa-solid fa-pen"></i></a>
+            <a class="btn text-warning" data-bs-toggle="modal" data-bs-target="#modalNote" data-><i class="fa-solid fa-pen"></i></a>
             <a class="btn text-danger" onclick="deleteNoteBox(${note.id})"><i class="fa-solid fa-trash-can"></i></a>
         </div>`;
     $('#notes')
