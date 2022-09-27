@@ -247,12 +247,13 @@ function onPlayerReady(event) {
         shouldPause = true;
     }
 
-    console.log(player.g.onfullscreenchange = (e) => {
-        isFullscreen = !isFullscreen
+    // TODO: Add button in fullscreen mode
+    // player.g.onfullscreenchange = (e) => {
+    //     isFullscreen = !isFullscreen
 
-        // console.log(e);
-        // console.log(player);
-    });
+    //     // console.log(e);
+    //     // console.log(player);
+    // };
 }
 
 
