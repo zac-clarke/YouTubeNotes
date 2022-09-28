@@ -8,6 +8,7 @@ $('#modalNote').on('shown.bs.modal', onModalNoteShow);
 $('#btn-submit').on('click', addNoteToDb);
 showYoutubePlayer();
 getNotesFromDb();
+
 /**
  * EventListener for when modalNote is shown
  */
@@ -28,7 +29,6 @@ function onModalNoteShow() {
             input.classList.remove("is-valid")
         }
     }));
-    // TODO: Maybe empty note field if timestamp different from last time user opened Modal
 }
 
 let isAdding = false;
@@ -92,8 +92,6 @@ function getNotesFromDb() {
             if (xhr.status == 204)
                 return $('#notes').html('<h4 class="text-danger">You don\'t have any notes yet!<br>Click the button above to add one.</h4>')
 
-            // TODO: Convert to Hashmap instead
-
             $('#notes')
                 .html('') // Empty the div
                 .removeClass('text-danger');
@@ -149,7 +147,7 @@ function saveEdit(id, timestamp) {
         fieldTitle.removeClass('has-error').prop('placeholder', 'Note Title');
         $.ajax({
             method: 'PUT',
-            url: `../api/notes.php?id=${id}&videoid=${videoid}&title=${fieldTitle.val()}&note=${fieldNote.val()}&timestamp=${timestamp}`,
+            url: `../api/notes.php?id=${id}&videoid=${videoid}&title=${encodeURIComponent(fieldTitle.val())}&note=${encodeURIComponent(fieldNote.val())}&timestamp=${timestamp}`,
             beforeSend: function () {
                 editing.set(id, true);
                 $(`${divID} .btn-save`).removeClass('text-success').addClass('text-white');
@@ -344,4 +342,3 @@ function pauseVideo() {
 function stopVideo() {
     player.stopVideo();
 }
-
