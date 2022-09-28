@@ -1,5 +1,5 @@
 <!-- Modal -->
-<?php 
+<?php
 // require_once "incl/logic/add-edit-video.php"; 
 define("VIDEO_URL_REGEX", "^(?:(?:https?:)?//)?(?:(?:www|m)\.)?(?:(?:youtube(?:-nocookie)?\.com|youtu.be))(?:/(?:[\w-]+\?v=|embed/|v/)?)(?<video_id>[\w-]+)(?:\S+)?$");
 define("VIDEO_URL_MAX", "128");
@@ -21,8 +21,8 @@ define("VIDEO_TITLE_MAX", "128");
 
           <input type="hidden" id="id" name="id" value="0">
           <div class="input-group has-validation">
-         
-            <input pattern="<?= VIDEO_URL_REGEX ?>" max=<?= VIDEO_URL_MAX ?> type="text" id="url" name="url" class="form-control has-validation" placeholder="http://"  value="" pattern="^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.be)\/.+$" title="A youtube video url" required>
+
+            <input pattern="<?= VIDEO_URL_REGEX ?>" max=<?= VIDEO_URL_MAX ?> type="text" id="url" name="url" class="form-control has-validation" placeholder="http://" value="" pattern="^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.be)\/.+$" title="A youtube video url" required>
             <div class="invalid-feedback mb-3" aria-describedby="url">
               Please enter a valid Youtube URL (max <?= VIDEO_URL_MAX ?> characters)
             </div>
@@ -40,13 +40,15 @@ define("VIDEO_TITLE_MAX", "128");
             </div>
           </div>
 
-          <button id="submit_test" class="btn btn-primary mt-3">
-          Button
+          <div id="server-feedback" class="mb-3">
+          </div>
+
+          <button id="submit" class="btn btn-primary mt-3">
+            Button
           </button>
-          <!-- <input type="button" name="submit" id="submit" class="btn btn-primary mt-3" onclick="" value="Adds">Button</input> -->
         </form>
 
-        
+
 
 
 

@@ -110,8 +110,8 @@ function editVideo()
     $valid = validateVideoinputs($url, $title);
 
     if ($valid) {
-        $stmt = $pdo->prepare("UPDATE videos SET userid=?, title=?=?, url=?=?, yt_id WHERE id=?");
-        if ($stmt->execute([$userid, $title, $url, $yt_id, $id]) && $stmt->rowCount()) {
+        $stmt = $pdo->prepare("UPDATE videos SET userid=?, title=?, url=?, yt_id=? WHERE id=? AND  userid=?");
+        if ($stmt->execute([$userid, $title, $url, $yt_id, $id, $userid]) && $stmt->rowCount()) {
             return getUserVideo($id);
         } else
             throw new Exception('Unable to update video', 400);
