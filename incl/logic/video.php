@@ -22,7 +22,6 @@ function loadPage($video)
 { ?>
     <script src='js/video.js' defer></script>
 <?php
-    $regex_timestamp = '(^\d*$)|(^\d*(:[0-5]?[0-9]){1,2}$)';
     loadVideoSection($video); // load video section (up to Add Note button)
     loadNotesSection($video); // load notes section (after Add Note button)
 }

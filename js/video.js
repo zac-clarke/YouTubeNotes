@@ -13,6 +13,7 @@ getNotesFromDb();
  * EventListener for when modalNote is shown
  */
 function onModalNoteShow() {
+    alert('here')
     pauseVideo();
     let modalNote = document.getElementById('modalNote');
     let form = modalNote.querySelector('form');
@@ -34,7 +35,7 @@ function onModalNoteShow() {
 
 let isAdding = false;
 function addNoteToDb() {
-    if (!isAdding && modalNote.querySelector('form').checkValidity()) {
+    if (!isAdding && document.getElementById('form-note').checkValidity()) {
         isAdding = true;
         let title = $('input[name="title"]');
         let note = $('textarea[name="note"]');
@@ -113,17 +114,28 @@ function populateNotes() {
 
 function addNoteBox(note) {
     //TODO : Edit button
+    //  onclick="openEditModal(${JSON.stringify(note).split('"').join("&quot;")})"
     let html =
-        `<div id="note${note.id}" class="p-4">
-            <h4>${note.title}</h4>
+        `<div id="note${note.id}" class="note p-4">
+            <input name="title${note.id}" type="text" value="${note.title}" placeholder="Note Title" disabled>
             ${convertSecondsToString(note.timestamp)} &nbsp; | &nbsp; ${note.trn_date}<br>
-            ${note.note}<br>
+            <textarea name="note${note.id}" type="text" rows="6" cols="40" placeholder="Note" disabled>${note.note}</textarea><br>
             <a class="btn text-info" onclick="player.seekTo(${note.timestamp}); player.playVideo();"><i class="fa-solid fa-play"></i></a>
-            <a class="btn text-warning" data-bs-toggle="modal" data-bs-target="#modalNote" data-><i class="fa-solid fa-pen"></i></a>
+            <a class="btn text-warning" onclick="makeNoteEditable(${JSON.stringify(note).split('"').join("&quot;")});"><i class="fa-solid fa-pen"></i></a>
             <a class="btn text-danger" onclick="deleteNoteBox(${note.id})"><i class="fa-solid fa-trash-can"></i></a>
         </div>`;
     $('#notes')
         .append(html);
+}
+
+function makeNoteEditable(note) {
+    // Make temp vars to hold initial value of title and note
+    let initTitle = note.title;
+    alert(initTitle);
+    // Make the input and textarea editable
+    // Replace the play and edit button with Save and Cancel
+    // When user presses cancel, it sets the fields values back from temp, makes fields uneditable, hides save+cancel, and shows play+edit
+    //When user presses save, it updates DB and does whats mentioned above
 }
 
 //TODO: Throttle spam - If user clicks the button several times
