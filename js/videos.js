@@ -94,7 +94,6 @@ function setActions() {
 }
 
 async function configureModal(id = 0) {
-  console.log('configmodal');
   //video modal
   const $modal = $("#video-modal");
   //form input in video modal
@@ -102,9 +101,7 @@ async function configureModal(id = 0) {
   const $url = $modal.find("#url");
   const $title = $modal.find("#title");
   const $modal_title = $modal.find("#modal_title");
-  const $submit = $modal.find("#submit");
-  console.log($submit);
-  return;
+  const $submit = $modal.find("#submit_test");
 
   if (!id) {
     //reset values
@@ -149,12 +146,8 @@ async function configureModal(id = 0) {
 
 function addVideo(){
   //video modal
-  alert('add');
   const $modal = $("#video-modal");
   const $form = $modal.find("form");
-  let valid = $form[0].checkValidity();
-console.log('valid');
-return;
 
 
  if($form[0].checkValidity()){

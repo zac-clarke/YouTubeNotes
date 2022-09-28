@@ -17,7 +17,7 @@ define("VIDEO_TITLE_MAX", "128");
 
 
         <!-- CLIENT SIDE ERROR HANDLING -->
-        <form action="dashboard.php" method="POST" class="px-5 needs-validation" novalidate>
+        <form action="" method="" class="px-5 needs-validation" novalidate>
 
           <input type="hidden" id="id" name="id" value="0">
           <div class="input-group has-validation">
@@ -40,7 +40,7 @@ define("VIDEO_TITLE_MAX", "128");
             </div>
           </div>
 
-          <button id="submit" class="btn btn-primary mt-3">
+          <button id="submit_test" class="btn btn-primary mt-3">
           Button
           </button>
           <!-- <input type="button" name="submit" id="submit" class="btn btn-primary mt-3" onclick="" value="Adds">Button</input> -->
