@@ -114,8 +114,8 @@ function addNoteBox(note) {
             <textarea name="note${note.id}" type="text" rows="6" cols="60" placeholder="Note" disabled>${note.note}</textarea><br>
             <a class="btn-play btn text-info" onclick="player.seekTo(${note.timestamp}); player.playVideo();" title="Play at current timestamp"><i class="fa-solid fa-play"></i></a>
             <a class="btn-edit btn text-warning" onclick="makeNoteEditable(${JSON.stringify(note).split('"').join("&quot;")});" title="Edit note"><i class="fa-solid fa-pen"></i></a>
-            <a class="btn-save btn text-success d-none" title="Update Note"><i class="fa-solid fa-check"></i></a>
-            <a class="btn-cancel btn text-warning d-none" title="Cancel"><i class="fa-solid fa-xmark"></i></a>
+            <a class="btn-save btn text-success d-none" title="Update Note" onclick="saveEdit(${note.id}, ${note.timestamp});"><i class="fa-solid fa-check"></i></a>
+            <a class="btn-cancel btn text-warning d-none" title="Cancel" onclick="cancelEdit(${note.id});"><i class="fa-solid fa-xmark"></i></a>
             <a class="btn-delete btn text-danger" onclick="deleteNoteBox(${note.id})" title="Delete Note"><i class="fa-solid fa-trash-can"></i></a>
         </div>`;
     $('#notes')
@@ -127,62 +127,69 @@ function makeNoteEditable(note) {
     // Get the id of the current div
     let id = note.id;
     let divID = '#note' + id;
-    // Make temp vars to hold initial value of title and note
-    var initTitle = note.title;
-    var initNote = note.note;
-    let fieldTitle = $(`${divID} input`);
-    let fieldNote = $(`${divID} textarea`);
-
+    var fieldTitle = $(`${divID} input`);
+    var fieldNote = $(`${divID} textarea`);
     // Make the input and textarea editable
     $(`${divID} input[disabled], ${divID} textarea[disabled]`).prop('disabled', false);
     // Replace the play and edit button with Save and Cancel + hide the delete button
     $(`${divID} .btn-play, ${divID} .btn-edit`).addClass('d-none');
     $(`${divID} .btn-save, ${divID} .btn-cancel`).removeClass('d-none');
-    // When user presses cancel, it sets the fields values back from temp, makes fields uneditable, hides save+cancel, and shows play+edit
-    $(`${divID} a.btn-cancel`).on('click', () => {
-        if (!editing.get(id)) {
-            fieldTitle.val(initTitle);
-            fieldNote.val(initNote);
-            fieldTitle.prop('disabled', true);
-            fieldNote.prop('disabled', true);
-            fieldTitle.removeClass('has-error').prop('placeholder', 'Note Title');
-            $(`${divID} .btn-play, ${divID} .btn-edit`).removeClass('d-none');
-            $(`${divID} .btn-save, ${divID} .btn-cancel`).addClass('d-none');
-        }
-    });
-    //When user presses save, it updates DB and does whats mentioned above
-    $(`${divID} a.btn-save`).on('click', () => {
+    editing.set(id + 'title', fieldTitle.val());
+    editing.set(id + 'note', fieldNote.val());
+}
 
-        if (fieldTitle.val().length == 0) {
-            fieldTitle.addClass('has-error').prop('placeholder', 'The title is required!').focus();
-        } else if (!editing.get(id)) {
-            fieldTitle.removeClass('has-error').prop('placeholder', 'Note Title');
-            $.ajax({
-                method: 'PUT',
-                url: `../api/notes.php?id=${id}&videoid=${videoid}&title=${fieldTitle.val()}&note=${fieldNote.val()}&timestamp=${note.timestamp}`,
-                data: { id: id, videoid: videoid, title: fieldTitle.val(), note: fieldNote.val(), timestamp: note.timestamp },
-                beforeSend: function () {
-                    editing.set(id, true);
-                    $(`${divID} .btn-save`).removeClass('text-success').addClass('text-white');
-                    $(`${divID} .btn-cancel`).removeClass('text-warning').addClass('text-white');
-                }, error: function (xhr) {
-                    alert(xhr.responseText)
-                }, success: function (data) {
-                    fieldTitle.prop('disabled', true);
-                    fieldNote.prop('disabled', true);
-                    $(`${divID} .btn-play, ${divID} .btn-edit`).removeClass('d-none');
-                    $(`${divID} .btn-save, ${divID} .btn-cancel`).addClass('d-none');
-                }, complete: function () {
-                    editing.set(id, false);
-                    $(`${divID} .btn-save`).addClass('text-success').removeClass('text-white');
-                    $(`${divID} .btn-cancel`).addClass('text-warning').removeClass('text-white');
-                    initTitle = note.title;
-                    initNote = note.note;
-                    $(`${divID} a.btn-cancel`).off('click');
-                }
-            });
-        }
-    });
+function saveEdit(id, timestamp) {
+    let divID = '#note' + id;
+    var fieldTitle = $(`${divID} input`);
+    var fieldNote = $(`${divID} textarea`);
+    if (fieldTitle.val().length == 0) {
+        fieldTitle.addClass('has-error').prop('placeholder', 'The title is required!').focus();
+    } else if (!editing.get(id)) {
+        // Make temp vars to hold initial value of title and note
+        fieldTitle.removeClass('has-error').prop('placeholder', 'Note Title');
+        $.ajax({
+            method: 'PUT',
+            url: `../api/notes.php?id=${id}&videoid=${videoid}&title=${fieldTitle.val()}&note=${fieldNote.val()}&timestamp=${timestamp}`,
+            beforeSend: function () {
+                editing.set(id, true);
+                $(`${divID} .btn-save`).removeClass('text-success').addClass('text-white');
+                $(`${divID} .btn-cancel`).removeClass('text-warning').addClass('text-white');
+            }, error: function (xhr) {
+                alert(xhr.responseText)
+            }, success: function (data) {
+                clearEditing(id);
+                fieldTitle.prop('disabled', true);
+                fieldNote.prop('disabled', true);
+                $(`${divID} .btn-play, ${divID} .btn-edit`).removeClass('d-none');
+                $(`${divID} .btn-save, ${divID} .btn-cancel`).addClass('d-none');
+            }, complete: function () {
+                $(`${divID} .btn-save`).addClass('text-success').removeClass('text-white');
+                $(`${divID} .btn-cancel`).addClass('text-warning').removeClass('text-white');
+            }
+        });
+    }
+}
+
+function cancelEdit(id) {
+    if (!editing.get(id)) {
+        let divID = '#note' + id;
+        let fieldTitle = $(`${divID} input`);
+        let fieldNote = $(`${divID} textarea`);
+        fieldTitle.val(editing.get(id + 'title'));
+        fieldNote.val(editing.get(id + 'note'));
+        fieldTitle.prop('disabled', true);
+        fieldNote.prop('disabled', true);
+        fieldTitle.removeClass('has-error').prop('placeholder', 'Note Title');
+        $(`${divID} .btn-play, ${divID} .btn-edit`).removeClass('d-none');
+        $(`${divID} .btn-save, ${divID} .btn-cancel`).addClass('d-none');
+        clearEditing(id);
+    }
+}
+
+function clearEditing(id) {
+    editing.delete(id);
+    editing.delete(id + 'title');
+    editing.delete(id + 'note');
 }
 
 var deleting = new Map();
