@@ -7,7 +7,7 @@ disableFormSubmission();
 $('#modalNote').on('shown.bs.modal', onModalNoteShow);
 $('#btn-submit').on('click', addNoteToDb);
 showYoutubePlayer();
-getNotesFromDb();
+getNotesFromDb('trn_date DESC');
 
 /**
  * EventListener for when modalNote is shown
@@ -29,6 +29,25 @@ function onModalNoteShow() {
             input.classList.remove("is-valid")
         }
     }));
+}
+
+lastSort = "";
+function orderByTimestamp() {
+    if (lastSort == 'timestamp ASC') {
+        lastSort = 'timestamp DESC'
+    } else {
+        lastSort = 'timestamp ASC'
+    }
+    getNotesFromDb(lastSort)
+}
+
+function orderByDate() {
+    if (lastSort == 'trn_date ASC') {
+        lastSort = 'trn_date DESC'
+    } else {
+        lastSort = 'trn_date ASC'
+    }
+    getNotesFromDb(lastSort)
 }
 
 let isAdding = false;
@@ -78,11 +97,10 @@ function addNoteToDb() {
     }
 }
 
-function getNotesFromDb() {
+function getNotesFromDb(order) {
     $.ajax({
         method: 'GET',
-        url: '../api/notes.php',
-        data: "videoid=" + videoid,
+        url: `../api/notes.php?videoid=${videoid}&order=${encodeURIComponent(order)}`,
         error: function (xhr) {
             // "responseText": "{"error": "Missing Parameters"}"
             // "status": 422
@@ -91,7 +109,6 @@ function getNotesFromDb() {
         success: function (/** @type {String} */data, textStatus, xhr) {
             if (xhr.status == 204)
                 return $('#notes').html('<h4 class="text-danger">You don\'t have any notes yet!<br>Click the button above to add one.</h4>')
-
             $('#notes')
                 .html('') // Empty the div
                 .removeClass('text-danger');

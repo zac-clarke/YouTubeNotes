@@ -11,7 +11,7 @@ try {
             if (!empty($_GET['id']))
                 $response["note"] = getNoteFromDb($_GET['id']);
             else if (!empty($_GET['videoid']))
-                $response["notes"] = getNotesFromDb($_GET['videoid']);
+                $response["notes"] = getNotesFromDb($_GET['videoid'], $_GET['order']);
             else
                 throw new Exception('Missing Parameters', 422);
             break;
@@ -66,11 +66,10 @@ function getNoteFromDb($id)
  * @param number $videoid The id of the video
  * @return Object[] An array of notes
  */
-function getNotesFromDb($videoid)
+function getNotesFromDb($videoid, $order = "date desc")
 {
     global $pdo;
-    $stmt = $pdo->prepare("SELECT * FROM notes WHERE videoid=?;");
-
+    $stmt = $pdo->prepare("SELECT * FROM notes WHERE videoid=? ORDER BY $order");
     if ($stmt->execute([$videoid]) && $stmt->rowCount())
         return $stmt->fetchAll();
     else
@@ -91,7 +90,7 @@ function editNoteInDb($id, $videoid, $title, $note, $timestamp)
 {
     global $pdo;
     $stmt = $pdo->prepare("UPDATE notes SET videoid=?, title=?, note=?, timestamp=? WHERE id=?");
-    if ($stmt->execute([$videoid, $title, $note, $timestamp, $id]) && $stmt->rowCount()) {
+    if ($stmt->execute([$videoid, $title, $note, $timestamp, $id])) {
         return getNoteFromDb($id);
     } else
         throw new Exception('Unable to update note', 400);

@@ -80,7 +80,7 @@ function loadNotesSection($video)
 { ?>
     <div class="container d-flex">
         <span class="h2 flex-grow-1">Your Notes</span>
-        <span class="d-none">TODO: Order by: Timestamp | date</span>
+        <span class="">Order by: <a href="#notes" onclick="orderByTimestamp()">Timestamp</a> | <a href="#notes" onclick="orderByDate()">date</a></span>
     </div>
     <div id="notes" class="container">
     </div>
