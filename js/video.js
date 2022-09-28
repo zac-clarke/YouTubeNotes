@@ -120,20 +120,28 @@ function addNoteBox(note) {
             <input name="title${note.id}" type="text" value="${note.title}" placeholder="Note Title" disabled>
             ${convertSecondsToString(note.timestamp)} &nbsp; | &nbsp; ${note.trn_date}<br>
             <textarea name="note${note.id}" type="text" rows="6" cols="40" placeholder="Note" disabled>${note.note}</textarea><br>
-            <a class="btn text-info" onclick="player.seekTo(${note.timestamp}); player.playVideo();"><i class="fa-solid fa-play"></i></a>
-            <a class="btn text-warning" onclick="makeNoteEditable(${JSON.stringify(note).split('"').join("&quot;")});"><i class="fa-solid fa-pen"></i></a>
-            <a class="btn text-danger" onclick="deleteNoteBox(${note.id})"><i class="fa-solid fa-trash-can"></i></a>
+            <a class="btn-play btn text-info" onclick="player.seekTo(${note.timestamp}); player.playVideo();" title="Play at current timestamp"><i class="fa-solid fa-play"></i></a>
+            <a class="btn-edit btn text-warning" onclick="makeNoteEditable(${JSON.stringify(note).split('"').join("&quot;")});" title="Edit note"><i class="fa-solid fa-pen"></i></a>
+            <a class="btn-save btn text-success d-none" onclick="" title="Update Note"><i class="fa-solid fa-check"></i></a>
+            <a class="btn-cancel btn text-warning d-none" onclick="" title="Cancel"><i class="fa-solid fa-xmark"></i></a>
+            <a class="btn-delete btn text-danger" onclick="deleteNoteBox(${note.id})" title="Delete Note"><i class="fa-solid fa-trash-can"></i></a>
         </div>`;
     $('#notes')
         .append(html);
 }
 
 function makeNoteEditable(note) {
+    // Get the id of the current div
+    let divID = 'note' + note.id;
     // Make temp vars to hold initial value of title and note
     let initTitle = note.title;
-    alert(initTitle);
+    let initalNote = note.note;
     // Make the input and textarea editable
+    $(`#${divID} input[disabled], #${divID} textarea[disabled]`).prop('disabled', false);
     // Replace the play and edit button with Save and Cancel
+    $(`#${divID} .btn-play, #${divID} .btn-edit`).addClass('d-none');
+    $(`#${divID} .btn-save, #${divID} .btn-cancel`).removeClass('d-none');
+    //$(`note$`)
     // When user presses cancel, it sets the fields values back from temp, makes fields uneditable, hides save+cancel, and shows play+edit
     //When user presses save, it updates DB and does whats mentioned above
 }
