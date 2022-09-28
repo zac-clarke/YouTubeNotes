@@ -71,11 +71,10 @@ function getUserVideos()
 {
     global $pdo;
     $userid = $_SESSION['user_id'];
-
     $stmt = $pdo->prepare("SELECT * FROM videos WHERE userid=?;");
     //if query is executed successfully AND at least one video is found
     if ($stmt->execute([$userid]) && $stmt->rowCount())
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     else
         throw new Exception('No Videos found', 204);
 }
