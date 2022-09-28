@@ -57,6 +57,7 @@ function diplayVideos(videos) {
 
     $template.remove();
     setActions();
+    console.log('test');
   }
 }
 
@@ -65,6 +66,7 @@ $(document).ready(function () {
 });
 
 function setActions() {
+  console.log('test');
   const $editBtn = $('[data-api="edit"]');
   const $addBtn = $('[data-api="add"]');
   const $deleteBtn = $('[data-api="delete"]');
@@ -92,6 +94,7 @@ function setActions() {
 }
 
 async function configureModal(id = 0) {
+  console.log('configmodal');
   //video modal
   const $modal = $("#video-modal");
   //form input in video modal
@@ -100,6 +103,8 @@ async function configureModal(id = 0) {
   const $title = $modal.find("#title");
   const $modal_title = $modal.find("#modal_title");
   const $submit = $modal.find("#submit");
+  console.log($submit);
+  return;
 
   if (!id) {
     //reset values
@@ -115,9 +120,9 @@ async function configureModal(id = 0) {
 
     //change titles
     $modal_title.text("Add Video");
-    $submit.val("Add");
+    $submit.text("Add");
 
-    // $submit.on("click", addVideo);
+    $submit.on("click", addVideo);
 
   } else {
     const response = await fetch(`/YouTubeNotes/api/_videos.php?id=${id}`);
@@ -130,6 +135,7 @@ async function configureModal(id = 0) {
       $url.classList.remove("is-invalid");
     }
     $title.val(video.title);
+    console.log('test');
     if ($title.hasClass("is-invalid")) {
       $title.classList.remove("is-invalid");
     }
@@ -137,14 +143,20 @@ async function configureModal(id = 0) {
 
     //change titles
     $modal_title.text("Edit Video");
-    $submit.val("Edit");
+    $submit.text("Edit");
   }
 }
 
 function addVideo(){
   //video modal
+  alert('add');
   const $modal = $("#video-modal");
   const $form = $modal.find("form");
+  let valid = $form[0].checkValidity();
+console.log('valid');
+return;
+
+
  if($form[0].checkValidity()){
   console.log('valid');
   return;
