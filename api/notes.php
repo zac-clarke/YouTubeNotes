@@ -22,16 +22,16 @@ try {
                 $response["note"] = addNoteToDb($_REQUEST['videoid'], $_REQUEST['title'], $_REQUEST['note'], $_REQUEST['timestamp']);
             break;
         case 'PUT':
-            if (empty($_REQUEST['id']) || empty($_REQUEST['videoid']) || empty($_REQUEST['title']) || empty($_REQUEST['timestamp']))
+            if (empty($_REQUEST['id']) || empty($_REQUEST['videoid']) || empty($_REQUEST['title']) || !isset($_REQUEST['timestamp']))
                 throw new Exception('Missing Parameters', 422);
             else
                 $response["note"] = editNoteInDb($_REQUEST['id'], $_REQUEST['videoid'], $_REQUEST['title'], $_REQUEST['note'], $_REQUEST['timestamp']);
             break;
         case 'DELETE':
-            if (!empty($_REQUEST['id']))
-                $response["success"] = deleteNoteFromDb($_REQUEST['id']);
-            else
+            if (empty($_REQUEST['id']))
                 throw new Exception(json_encode($_SERVER) . 'Missing Parameters', 422);
+            else
+                $response["success"] = deleteNoteFromDb($_REQUEST['id']);
             break;
     }
 } catch (Exception $e) {

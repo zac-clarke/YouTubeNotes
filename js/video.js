@@ -2,7 +2,6 @@
 var player;
 var curTime = 0;
 var videoid = getParam('videoid');
-var notes = [];
 
 disableFormSubmission();
 $('#modalNote').on('shown.bs.modal', onModalNoteShow);
@@ -13,7 +12,6 @@ getNotesFromDb();
  * EventListener for when modalNote is shown
  */
 function onModalNoteShow() {
-    alert('here')
     pauseVideo();
     let modalNote = document.getElementById('modalNote');
     let form = modalNote.querySelector('form');
@@ -96,20 +94,14 @@ function getNotesFromDb() {
 
             // TODO: Convert to Hashmap instead
 
+            $('#notes')
+                .html('') // Empty the div
+                .removeClass('text-danger');
             JSON.parse(data)["notes"].forEach(note => {
-                notes[note.id] = note
+                addNoteBox(note);
             });
-            populateNotes();
         }
     });
-}
-
-function populateNotes() {
-    $('#notes')
-        .html('') // Empty the div
-        .removeClass('text-danger');
-    //notes.forEach(addNote);
-    notes.forEach(addNoteBox)
 }
 
 function addNoteBox(note) {
@@ -119,47 +111,102 @@ function addNoteBox(note) {
         `<div id="note${note.id}" class="note p-4">
             <input name="title${note.id}" type="text" value="${note.title}" placeholder="Note Title" disabled>
             ${convertSecondsToString(note.timestamp)} &nbsp; | &nbsp; ${note.trn_date}<br>
-            <textarea name="note${note.id}" type="text" rows="6" cols="40" placeholder="Note" disabled>${note.note}</textarea><br>
+            <textarea name="note${note.id}" type="text" rows="6" cols="60" placeholder="Note" disabled>${note.note}</textarea><br>
             <a class="btn-play btn text-info" onclick="player.seekTo(${note.timestamp}); player.playVideo();" title="Play at current timestamp"><i class="fa-solid fa-play"></i></a>
             <a class="btn-edit btn text-warning" onclick="makeNoteEditable(${JSON.stringify(note).split('"').join("&quot;")});" title="Edit note"><i class="fa-solid fa-pen"></i></a>
-            <a class="btn-save btn text-success d-none" onclick="" title="Update Note"><i class="fa-solid fa-check"></i></a>
-            <a class="btn-cancel btn text-warning d-none" onclick="" title="Cancel"><i class="fa-solid fa-xmark"></i></a>
+            <a class="btn-save btn text-success d-none" title="Update Note"><i class="fa-solid fa-check"></i></a>
+            <a class="btn-cancel btn text-warning d-none" title="Cancel"><i class="fa-solid fa-xmark"></i></a>
             <a class="btn-delete btn text-danger" onclick="deleteNoteBox(${note.id})" title="Delete Note"><i class="fa-solid fa-trash-can"></i></a>
         </div>`;
     $('#notes')
         .append(html);
 }
 
+var editing = new Map();
 function makeNoteEditable(note) {
     // Get the id of the current div
-    let divID = 'note' + note.id;
+    let id = note.id;
+    let divID = '#note' + id;
     // Make temp vars to hold initial value of title and note
-    let initTitle = note.title;
-    let initalNote = note.note;
-    // Make the input and textarea editable
-    $(`#${divID} input[disabled], #${divID} textarea[disabled]`).prop('disabled', false);
-    // Replace the play and edit button with Save and Cancel
-    $(`#${divID} .btn-play, #${divID} .btn-edit`).addClass('d-none');
-    $(`#${divID} .btn-save, #${divID} .btn-cancel`).removeClass('d-none');
-    //$(`note$`)
-    // When user presses cancel, it sets the fields values back from temp, makes fields uneditable, hides save+cancel, and shows play+edit
-    //When user presses save, it updates DB and does whats mentioned above
-}
+    var initTitle = note.title;
+    var initNote = note.note;
+    let fieldTitle = $(`${divID} input`);
+    let fieldNote = $(`${divID} textarea`);
 
-//TODO: Throttle spam - If user clicks the button several times
-function deleteNoteBox(id) {
-    $.ajax({
-        method: 'DELETE',
-        url: '../api/notes.php?id=' + id,
-        error: function (xhr) {
-            // "responseText": "{"error": "Missing Parameters"}"
-            // "status": 422
-            alert(xhr.status + ': ' + JSON.parse(xhr.responseText).error)
-        },
-        success: function (/** @type {String} */data, textStatus, xhr) {
-            $(`#note${id}`).remove();
+    // Make the input and textarea editable
+    $(`${divID} input[disabled], ${divID} textarea[disabled]`).prop('disabled', false);
+    // Replace the play and edit button with Save and Cancel + hide the delete button
+    $(`${divID} .btn-play, ${divID} .btn-edit`).addClass('d-none');
+    $(`${divID} .btn-save, ${divID} .btn-cancel`).removeClass('d-none');
+    // When user presses cancel, it sets the fields values back from temp, makes fields uneditable, hides save+cancel, and shows play+edit
+    $(`${divID} a.btn-cancel`).on('click', () => {
+        if (!editing.get(id)) {
+            fieldTitle.val(initTitle);
+            fieldNote.val(initNote);
+            fieldTitle.prop('disabled', true);
+            fieldNote.prop('disabled', true);
+            fieldTitle.removeClass('has-error').prop('placeholder', 'Note Title');
+            $(`${divID} .btn-play, ${divID} .btn-edit`).removeClass('d-none');
+            $(`${divID} .btn-save, ${divID} .btn-cancel`).addClass('d-none');
         }
     });
+    //When user presses save, it updates DB and does whats mentioned above
+    $(`${divID} a.btn-save`).on('click', () => {
+
+        if (fieldTitle.val().length == 0) {
+            fieldTitle.addClass('has-error').prop('placeholder', 'The title is required!').focus();
+        } else if (!editing.get(id)) {
+            fieldTitle.removeClass('has-error').prop('placeholder', 'Note Title');
+            $.ajax({
+                method: 'PUT',
+                url: `../api/notes.php?id=${id}&videoid=${videoid}&title=${fieldTitle.val()}&note=${fieldNote.val()}&timestamp=${note.timestamp}`,
+                data: { id: id, videoid: videoid, title: fieldTitle.val(), note: fieldNote.val(), timestamp: note.timestamp },
+                beforeSend: function () {
+                    editing.set(id, true);
+                    $(`${divID} .btn-save`).removeClass('text-success').addClass('text-white');
+                    $(`${divID} .btn-cancel`).removeClass('text-warning').addClass('text-white');
+                }, error: function (xhr) {
+                    alert(xhr.responseText)
+                }, success: function (data) {
+                    fieldTitle.prop('disabled', true);
+                    fieldNote.prop('disabled', true);
+                    $(`${divID} .btn-play, ${divID} .btn-edit`).removeClass('d-none');
+                    $(`${divID} .btn-save, ${divID} .btn-cancel`).addClass('d-none');
+                }, complete: function () {
+                    editing.set(id, false);
+                    $(`${divID} .btn-save`).addClass('text-success').removeClass('text-white');
+                    $(`${divID} .btn-cancel`).addClass('text-warning').removeClass('text-white');
+                    initTitle = note.title;
+                    initNote = note.note;
+                    $(`${divID} a.btn-cancel`).off('click');
+                }
+            });
+        }
+    });
+}
+
+var deleting = new Map();
+function deleteNoteBox(id) {
+    if (!deleting.get(id))
+        $.ajax({
+            method: 'DELETE',
+            url: '../api/notes.php?id=' + id,
+            beforeSend: function () {
+                deleting.set(id, true);
+
+            },
+            error: function (xhr) {
+                // "responseText": "{"error": "Missing Parameters"}"
+                // "status": 422
+                alert(xhr.status + ': ' + JSON.parse(xhr.responseText).error)
+            },
+            success: function (/** @type {String} */data, textStatus, xhr) {
+                $(`#note${id}`).remove();
+            },
+            complete: function () {
+                deleting.delete(id);
+            }
+        });
 }
 
 /**
@@ -255,25 +302,15 @@ function onYouTubeIframeAPIReady() {
 }
 
 var shouldPause = false;
-var isFullscreen = false;
 /**
  * The API will call this function when the video player is ready.
  * @param {*} event 
  */
 function onPlayerReady(event) {
-    //event.target.playVideo();
     if (curTime != 0) {
         player.seekTo(curTime);
         shouldPause = true;
     }
-
-    // TODO: Add button in fullscreen mode
-    // player.g.onfullscreenchange = (e) => {
-    //     isFullscreen = !isFullscreen
-
-    //     // console.log(e);
-    //     // console.log(player);
-    // };
 }
 
 

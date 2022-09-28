@@ -23,6 +23,7 @@ $create_tbl_videos = "CREATE TABLE IF NOT EXISTS `videos` (
     id int AUTO_INCREMENT NOT NULL,
     userid int NOT NULL,
     url VARCHAR(128) NOT NULL,
+    yt_id VARCHAR(12) NOT NULL,
     title VARCHAR(128) NOT NULL,
     trn_date DATETIME NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     CONSTRAINT pk_videos_id PRIMARY KEY (id asc),

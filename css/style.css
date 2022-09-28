@@ -11,3 +11,7 @@
     background-color: rgba(0, 0, 0, 0);
     border: none;
 }
+
+input.has-error::placeholder {
+    color: red;
+}
