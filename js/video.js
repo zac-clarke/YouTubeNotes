@@ -2,6 +2,7 @@
 var player;
 var curTime = 0;
 var videoid = getParam('videoid');
+var lastSort = "trn_date DESC";
 
 disableFormSubmission();
 $('#modalNote').on('shown.bs.modal', onModalNoteShow);
@@ -31,7 +32,6 @@ function onModalNoteShow() {
     }));
 }
 
-lastSort = "";
 function orderByTimestamp() {
     if (lastSort == 'timestamp ASC') {
         lastSort = 'timestamp DESC'
@@ -70,8 +70,7 @@ function addNoteToDb() {
             error: function (xhr) {
                 // "responseText": "{"error": "Missing Parameters"}"
                 // "status": 422
-                alert(JSON.stringify(xhr))
-                //$('#notes').addClass('text-danger').html('<h2>An error occured while loading the Notes for this video</h2>')
+                alert(xhr.status + ': ' + JSON.parse(xhr.responseText).error)
             },
             success: function (/** @type {String} */data, textStatus, xhr) {
                 let note = JSON.parse(data)["note"];
@@ -170,7 +169,7 @@ function saveEdit(id, timestamp) {
                 $(`${divID} .btn-save`).removeClass('text-success').addClass('text-white');
                 $(`${divID} .btn-cancel`).removeClass('text-warning').addClass('text-white');
             }, error: function (xhr) {
-                alert(xhr.responseText)
+                alert(xhr.status + ': ' + JSON.parse(xhr.responseText).error)
             }, success: function (data) {
                 clearEditing(id);
                 fieldTitle.prop('disabled', true);
