@@ -119,7 +119,7 @@ async function configModal(id = 0) {
     //change titles
     $modal_title.text("Add Video");
     $submit.text("Add");
-    $submit.on("click", addVideo);
+    $submit.click = addVideo;
   } else {
     const response = await fetch(`/YouTubeNotes/api/_videos.php?id=${id}`);
     const data = await response.json();
@@ -140,7 +140,8 @@ async function configModal(id = 0) {
     //change titles
     $modal_title.text("Edit Video");
     $submit.text("Update");
-    $submit.on("click", function () {
+    $submit.click(function () {
+      alert('click edit');
       editVideo(id);
     });
   }
@@ -196,15 +197,18 @@ function editVideo(id) {
     console.log($url.val());
     console.log($title.val());
 
+//alert( `api/_videos.php?id=${id}&url=${encodeURIComponent($url.val())}&title=${$title.val()}`);
  
     $.ajax({
       type: "PUT",
       // ?id=${id}&url=${$url.val()}&title=${$title.val()}
-      url: `api/_videos.php`,
-      dataType: "json",
-      data: { id: id, url: $url.val(), title: $title.val() },
+      url: `api/_videos.php?id=${id}&url=${encodeURIComponent($url.val())}&title=${$title.val()}`,
+      // dataType: "json",
+      // contentType: "application/json; charset=utf-8",
+      // data: JSON.stringify({ id: id, url: $url.val(), title: $title.val() }),
       error: function (xhr, textStatus, errorThrown) {
-        this.showfeedback(`An error occured while trying to edit video`, true);
+        // this.showfeedback(`An error occured while trying to edit video`, true);
+        alert(JSON.stringify(xhr));
       },
       success: function (data, textStatus, xhr) {
         showVideo(data.video);
@@ -274,4 +278,5 @@ function resetForm($form) {
   $server_feedback = $form.find("#server-feedback");
   $server_feedback.removeClass("text-danger text-success");
   $server_feedback.text("");
+  $submit = $form.find("#input");
 }

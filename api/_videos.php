@@ -24,7 +24,7 @@ try {
             break;
         case 'PUT':
             if (empty($_REQUEST['id']))
-                throw new Exception('Missing Parameters', 422);
+                throw new Exception('Missing Parameters Random', 422);
             else
                 $response["video"] = editVideo();
             break;
@@ -102,19 +102,29 @@ function addVideo()
 function editVideo()
 {
     global $pdo;
-    $id = sanitize($_POST['id']);
+    $id = sanitize($_REQUEST['id']);
     $userid = $_SESSION['user_id'];
-    $title = sanitize($_POST['title']);
-    $url = sanitize($_POST['url']);
+    $title = sanitize($_REQUEST['title']);
+    $url = sanitize($_REQUEST['url']);
     $yt_id =  extract_id(VIDEO_URL_REGEX, $url);
+    echo $yt_id;
     $valid = validateVideoinputs($url, $title);
 
     if ($valid) {
-        $stmt = $pdo->prepare("UPDATE videos SET userid=?, title=?, url=?, yt_id=? WHERE id=? AND  userid=?");
-        if ($stmt->execute([$userid, $title, $url, $yt_id, $id, $userid]) && $stmt->rowCount()) {
-            return getUserVideo($id);
-        } else
-            throw new Exception('Unable to update video', 400);
+        $stmt = $pdo->prepare("UPDATE videos SET title=?, url=?, yt_id=? WHERE id=? AND  userid=?");
+       
+        if ($stmt->execute([$title, $url, $yt_id, $id, $userid])) {
+            throw new Exception('statement executed', 400);
+        } else {
+            throw new Exception('statement not executed: '.$pdo-> errorInfo(), 400);
+        }
+        
+        
+        
+        // && $stmt->rowCount()) {
+        //     return getUserVideo($id);
+        // } else
+        //     throw new Exception('Unable to update video', 400);
     } else {
         throw new Exception('Input Failed validation', 422);
     }
