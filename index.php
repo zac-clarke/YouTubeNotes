@@ -1,4 +1,4 @@
-<?php require "incl/parts/header.php"; ?>
+<?php require "incl/parts/header.php";?>
 <main class="px-3">
 
     <div class="mt-5">
@@ -44,10 +44,16 @@
             </div>
         </div>
     </div>
+    <?php if (!$loggedin): ?>
     <div class="container mb-5 mt-5">
         <h3>Sign up now!</h3>
         <a class="btn btn-primary" href="#" id="btn_signup" data-bs-toggle="modal" data-bs-target="#signup">Signup</a>
     </div>
-
+    <?php else: ?>
+    <div class="container mb-5 mt-5">
+        <h3>Let's get started'!</h3>
+        <a class="btn btn-primary" href="dashboard.php">Add Videos</a>
+    </div>
+    <?php endif;?>
 </main>
-<?php require "incl/parts/footer.php"; ?>
+<?php require "incl/parts/footer.php";?>
