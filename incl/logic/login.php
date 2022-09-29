@@ -4,9 +4,9 @@ $username = $password = "";
 $username_error = $password_error = $auth_error = "";
 $valid = true;
 
-if (isset($_POST['submit'])) {
-   
-    require_once ("incl/logic/sanitize.php");
+if (isset($_REQUEST['login'])) {
+
+    require_once("incl/logic/sanitize.php");
 
     //get input values
     $username = sanitize($_POST['username']);
@@ -14,16 +14,16 @@ if (isset($_POST['submit'])) {
     $valid = true;
 
     //validate
-  if (empty($username)) {
-    $valid = false;
-    $username_error = "Required field";
-  } 
+    if (empty($username)) {
+        $valid = false;
+        $username_error = "Required field";
+    }
 
-  if (empty($password)) {
-    $valid = false;
-    $password_error  = "Required field";
-  }
-  
+    if (empty($password)) {
+        $valid = false;
+        $password_error  = "Required field";
+    }
+
 
     //check database for matches
     if ($valid) {
@@ -58,11 +58,11 @@ if (isset($_POST['submit'])) {
                 mysqli_stmt_close($stmt);
                 header('location: dashboard.php');
             } else {
-              
+
                 $auth_error = "wrong username or password";
             }
         } else {
-           
+
             $auth_error = "wrong username or password";
         }
     }
