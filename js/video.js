@@ -5,8 +5,10 @@ var videoid = getParam('videoid');
 var lastSort = "trn_date DESC";
 
 disableFormSubmission();
-$('#modalNote').on('shown.bs.modal', onModalNoteShow);
-$('#btn-submit').on('click', addNoteToDb);
+$('#modalNote')
+    .on('shown.bs.modal', onModalNoteShow);
+$('#btn-submit')
+    .on('click', addNoteToDb);
 showYoutubePlayer();
 getNotesFromDb('trn_date DESC');
 
@@ -50,6 +52,21 @@ function orderByDate() {
     getNotesFromDb(lastSort)
 }
 
+function calcTextAreaHeight(id) {
+    $textarea = $(`textarea[name="note${id}"]`);
+    let noteLength = $textarea
+        .val()
+        .length;
+    let cols = 60;
+    let rows = Math.ceil(noteLength / cols);
+    const lines = $textarea.val().split("\n").length;
+    if (lines > rows)
+        rows = lines;
+    $textarea
+        .prop('rows', (rows > 10) ? 10 : ((rows < 3) ? 3 : rows))
+        .prop('cols', cols);
+}
+
 let isAdding = false;
 function addNoteToDb() {
     if (!isAdding && document.getElementById('form-note').checkValidity()) {
@@ -75,12 +92,14 @@ function addNoteToDb() {
             success: function (/** @type {String} */data, textStatus, xhr) {
                 let note = JSON.parse(data)["note"];
                 addNoteBox(note);
-                $('#modalNote').modal('hide');
-                $('#modalNote input, #modalNote textarea').each(function () {
-                    $(this)
-                        .val('')
-                        .removeClass('is-valid');
-                });
+                $('#modalNote')
+                    .modal('hide');
+                $('#modalNote input, #modalNote textarea')
+                    .each(function () {
+                        $(this)
+                            .val('')
+                            .removeClass('is-valid');
+                    });
             },
             complete: function () {
                 isAdding = false;
@@ -103,14 +122,17 @@ function getNotesFromDb(order) {
         error: function (xhr) {
             // "responseText": "{"error": "Missing Parameters"}"
             // "status": 422
-            $('#notes').html('<h2 class="text-danger">An error occured while loading the Notes for this video</h2>')
+            $('#notes')
+                .html('<h2 class="text-danger">An error occured while loading the Notes for this video</h2>')
         },
         success: function (/** @type {String} */data, textStatus, xhr) {
             if (xhr.status == 204)
-                return $('#notes').html('<h4 class="text-danger">You don\'t have any notes yet!<br>Click the button above to add one.</h4>')
+                return $('#notes')
+                    .html('<h4 class="text-danger">You don\'t have any notes yet!<br>Click the button above to add one.</h4>')
             $('#notes')
                 .html('') // Empty the div
                 .removeClass('text-danger');
+            alert(data)
             JSON.parse(data)["notes"].forEach(note => {
                 addNoteBox(note);
             });
@@ -125,7 +147,7 @@ function addNoteBox(note) {
         `<div id="note${note.id}" class="note p-4">
             <input name="title${note.id}" type="text" value="${note.title}" placeholder="Note Title" disabled>
             ${convertSecondsToString(note.timestamp)} &nbsp; | &nbsp; ${note.trn_date}<br>
-            <textarea name="note${note.id}" type="text" rows="6" cols="60" placeholder="Note" disabled>${note.note}</textarea><br>
+            <textarea name="note${note.id}" type="text" placeholder="Note" oninput="calcTextAreaHeight(${note.id});" disabled>${note.note}</textarea><br>
             <a class="btn-play btn text-info" onclick="player.seekTo(${note.timestamp}); player.playVideo();" title="Play at current timestamp"><i class="fa-solid fa-play"></i></a>
             <a class="btn-edit btn text-warning" onclick="makeNoteEditable(${JSON.stringify(note).split('"').join("&quot;")});" title="Edit note"><i class="fa-solid fa-pen"></i></a>
             <a class="btn-save btn text-success d-none" title="Update Note" onclick="saveEdit(${note.id}, ${note.timestamp});"><i class="fa-solid fa-check"></i></a>
@@ -134,6 +156,7 @@ function addNoteBox(note) {
         </div>`;
     $('#notes')
         .append(html);
+    calcTextAreaHeight(note.id);
 }
 
 var editing = new Map();
@@ -144,10 +167,13 @@ function makeNoteEditable(note) {
     var fieldTitle = $(`${divID} input`);
     var fieldNote = $(`${divID} textarea`);
     // Make the input and textarea editable
-    $(`${divID} input[disabled], ${divID} textarea[disabled]`).prop('disabled', false);
+    $(`${divID} input[disabled], ${divID} textarea[disabled]`)
+        .prop('disabled', false);
     // Replace the play and edit button with Save and Cancel + hide the delete button
-    $(`${divID} .btn-play, ${divID} .btn-edit`).addClass('d-none');
-    $(`${divID} .btn-save, ${divID} .btn-cancel`).removeClass('d-none');
+    $(`${divID} .btn-play, ${divID} .btn-edit`)
+        .addClass('d-none');
+    $(`${divID} .btn-save, ${divID} .btn-cancel`)
+        .removeClass('d-none');
     editing.set(id + 'title', fieldTitle.val());
     editing.set(id + 'note', fieldNote.val());
 }
@@ -157,28 +183,43 @@ function saveEdit(id, timestamp) {
     var fieldTitle = $(`${divID} input`);
     var fieldNote = $(`${divID} textarea`);
     if (fieldTitle.val().length == 0) {
-        fieldTitle.addClass('has-error').prop('placeholder', 'The title is required!').focus();
+        fieldTitle.addClass('has-error')
+            .prop('placeholder', 'The title is required!')
+            .focus();
     } else if (!editing.get(id)) {
         // Make temp vars to hold initial value of title and note
-        fieldTitle.removeClass('has-error').prop('placeholder', 'Note Title');
+        fieldTitle
+            .removeClass('has-error')
+            .prop('placeholder', 'Note Title');
         $.ajax({
             method: 'PUT',
             url: `../api/notes.php?id=${id}&videoid=${videoid}&title=${encodeURIComponent(fieldTitle.val())}&note=${encodeURIComponent(fieldNote.val())}&timestamp=${timestamp}`,
             beforeSend: function () {
                 editing.set(id, true);
-                $(`${divID} .btn-save`).removeClass('text-success').addClass('text-white');
-                $(`${divID} .btn-cancel`).removeClass('text-warning').addClass('text-white');
+                $(`${divID} .btn-save`)
+                    .removeClass('text-success')
+                    .addClass('text-white');
+                $(`${divID} .btn-cancel`)
+                    .removeClass('text-warning')
+                    .addClass('text-white');
             }, error: function (xhr) {
                 alert(xhr.status + ': ' + JSON.parse(xhr.responseText).error)
             }, success: function (data) {
                 clearEditing(id);
+                calcTextAreaHeight(id);
                 fieldTitle.prop('disabled', true);
                 fieldNote.prop('disabled', true);
-                $(`${divID} .btn-play, ${divID} .btn-edit`).removeClass('d-none');
-                $(`${divID} .btn-save, ${divID} .btn-cancel`).addClass('d-none');
+                $(`${divID} .btn-play, ${divID} .btn-edit`)
+                    .removeClass('d-none');
+                $(`${divID} .btn-save, ${divID} .btn-cancel`)
+                    .addClass('d-none');
             }, complete: function () {
-                $(`${divID} .btn-save`).addClass('text-success').removeClass('text-white');
-                $(`${divID} .btn-cancel`).addClass('text-warning').removeClass('text-white');
+                $(`${divID} .btn-save`)
+                    .addClass('text-success')
+                    .removeClass('text-white');
+                $(`${divID} .btn-cancel`)
+                    .addClass('text-warning')
+                    .removeClass('text-white');
             }
         });
     }
@@ -194,8 +235,10 @@ function cancelEdit(id) {
         fieldTitle.prop('disabled', true);
         fieldNote.prop('disabled', true);
         fieldTitle.removeClass('has-error').prop('placeholder', 'Note Title');
-        $(`${divID} .btn-play, ${divID} .btn-edit`).removeClass('d-none');
-        $(`${divID} .btn-save, ${divID} .btn-cancel`).addClass('d-none');
+        $(`${divID} .btn-play, ${divID} .btn-edit`)
+            .removeClass('d-none');
+        $(`${divID} .btn-save, ${divID} .btn-cancel`)
+            .addClass('d-none');
         clearEditing(id);
     }
 }
@@ -222,7 +265,8 @@ function deleteNoteBox(id) {
                 alert(xhr.status + ': ' + JSON.parse(xhr.responseText).error)
             },
             success: function (/** @type {String} */data, textStatus, xhr) {
-                $(`#note${id}`).remove();
+                $(`#note${id}`)
+                    .remove();
             },
             complete: function () {
                 deleting.delete(id);

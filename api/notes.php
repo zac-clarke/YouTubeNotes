@@ -9,9 +9,9 @@ try {
     switch ($_SERVER['REQUEST_METHOD']) { // Check which request method was used. Get/Post/Put/Delete/...
         case 'GET':
             if (!empty($_GET['id']))
-                $response["note"] = getNoteFromDb($_GET['id']);
+                $response["note"] = getNoteFromDb(htmlspecialchars($_GET['id']));
             else if (!empty($_GET['videoid']))
-                $response["notes"] = getNotesFromDb($_GET['videoid'], $_GET['order']);
+                $response["notes"] = getNotesFromDb(htmlspecialchars($_GET['videoid']), htmlspecialchars($_GET['order']));
             else
                 throw new Exception('Missing Parameters', 422);
             break;
@@ -19,19 +19,19 @@ try {
             if (empty($_REQUEST['videoid']) || empty($_REQUEST['title']) || !isset($_REQUEST['timestamp']))
                 throw new Exception('Missing Parameters', 422);
             else
-                $response["note"] = addNoteToDb($_REQUEST['videoid'], $_REQUEST['title'], $_REQUEST['note'], $_REQUEST['timestamp']);
+                $response["note"] = addNoteToDb(htmlspecialchars($_REQUEST['videoid']), htmlspecialchars($_REQUEST['title']), htmlspecialchars($_REQUEST['note']), htmlspecialchars($_REQUEST['timestamp']));
             break;
         case 'PUT':
             if (empty($_REQUEST['id']) || empty($_REQUEST['videoid']) || empty($_REQUEST['title']) || !isset($_REQUEST['timestamp']))
                 throw new Exception('Missing Parameters', 422);
             else
-                $response["note"] = editNoteInDb($_REQUEST['id'], $_REQUEST['videoid'], $_REQUEST['title'], $_REQUEST['note'], $_REQUEST['timestamp']);
+                $response["note"] = editNoteInDb(htmlspecialchars($_REQUEST['id']), htmlspecialchars($_REQUEST['videoid']), htmlspecialchars($_REQUEST['title']), htmlspecialchars($_REQUEST['note']), htmlspecialchars($_REQUEST['timestamp']));
             break;
         case 'DELETE':
             if (empty($_REQUEST['id']))
                 throw new Exception(json_encode($_SERVER) . 'Missing Parameters', 422);
             else
-                $response["success"] = deleteNoteFromDb($_REQUEST['id']);
+                $response["success"] = deleteNoteFromDb(htmlspecialchars($_REQUEST['id']));
             break;
     }
 } catch (Exception $e) {
