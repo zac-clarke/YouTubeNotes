@@ -2,7 +2,6 @@
 //Login logic
 $username = $password = "";
 $username_error = $password_error = $auth_error = "";
-$valid = true;
 
 if (isset($_REQUEST['login'])) {
     require_once("incl/logic/sanitize.php");
@@ -26,7 +25,6 @@ if (isset($_REQUEST['login'])) {
 
     //check database for matches
     if ($valid) {
-
         $qry = "SELECT id, username, password FROM users WHERE username=?";
         $stmt = mysqli_prepare($conn, $qry);
         mysqli_stmt_bind_param($stmt, "s", $username);

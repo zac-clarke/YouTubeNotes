@@ -43,31 +43,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } finally {
                 // $result = mysqli_query($conn,$query);
                 if (!empty($result)) {
-                    $qry = "SELECT id, username FROM users WHERE username=?";
+                    $qry = "SELECT id, username, password FROM users WHERE username=?";
                     $stmt = mysqli_prepare($conn, $qry);
                     mysqli_stmt_bind_param($stmt, "s", $username);
                     mysqli_stmt_execute($stmt) or die("Server error : login failed");
                     mysqli_stmt_store_result($stmt);
                     if (mysqli_stmt_num_rows($stmt) == 1) {
-
-                        mysqli_stmt_bind_result($stmt, $id, $username);
+                        mysqli_stmt_bind_result($stmt, $id, $username, $password);
                         mysqli_stmt_fetch($stmt);
 
-                        //get user data
-                        $user = [
-                            "username" => $username,
-                            "user_id" => $id
-                        ];
+                        if ($password == $hashed_password) {
+                            //get user data
+                            $user = [
+                                "username" => $username,
+                                "user_id" => $id
+                            ];
 
-                        //save used data to session 
-                        //TODO : set session timeout (ex: 30 min) and extend that every time tehre is a request
-                        //reference: https://stackoverflow.com/questions/520237/how-do-i-expire-a-php-session-after-30-minutes
-                        $_SESSION['user'] =  $user;
-                        $_SESSION['username'] = $username;
-                        $_SESSION['user_id'] = $id;
+                            //save used data to session 
+                            //TODO : set session timeout (ex: 30 min) and extend that every time tehre is a request
+                            //reference: https://stackoverflow.com/questions/520237/how-do-i-expire-a-php-session-after-30-minutes
+                            $_SESSION['user'] =  $user;
+                            $_SESSION['username'] = $username;
+                            $_SESSION['user_id'] = $id;
 
-                        mysqli_stmt_close($stmt);
-                        echo "<script>window.location.href='dashboard.php?first'</script>";
+                            mysqli_stmt_close($stmt);
+                            echo "<script>window.location.href='dashboard.php?first'</script>";
+                        } else
+                            die("Registration was successful, but wasn't able to log in!");
                     }
                 }
             }
