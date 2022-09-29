@@ -66,7 +66,7 @@ function calcTextAreaHeight(id) {
     $textarea
         .prop('cols', cols)
         .prop('rows', rows > 10 ? 10 :
-            rows < 3 ? 3 :
+            rows < 1 ? 1 :
             rows);
 }
 
@@ -163,15 +163,29 @@ function getNotesFromDb(order) {
 function addNoteBox(note) {
     $('#notes h6.no-notes').remove();
     let html =
-        `<div id="note${note.id}" class="note p-4">
-            <input name="title${note.id}" type="text" value="${note.title}" placeholder="Note Title" disabled>
-            ${convertSecondsToString(note.timestamp)} &nbsp; | &nbsp; ${note.trn_date}<br>
-            <textarea name="note${note.id}" type="text" placeholder="Note" oninput="calcTextAreaHeight(${note.id});" disabled>${note.note}</textarea><br>
-            <a class="btn-play btn text-info" onclick="player.seekTo(${note.timestamp}); player.playVideo();" title="Play at current timestamp"><i class="fa-solid fa-play"></i></a>
-            <a class="btn-edit btn text-warning" onclick="makeNoteEditable(${JSON.stringify(note).split('"').join("&quot;")});" title="Edit note"><i class="fa-solid fa-pen"></i></a>
-            <a class="btn-save btn text-success d-none" title="Update Note" onclick="saveEdit(${note.id}, ${note.timestamp});"><i class="fa-solid fa-check"></i></a>
-            <a class="btn-cancel btn text-warning d-none" title="Cancel" onclick="cancelEdit(${note.id});"><i class="fa-solid fa-xmark"></i></a>
-            <a class="btn-delete btn text-danger" onclick="deleteNoteBox(${note.id})" title="Delete Note"><i class="fa-solid fa-trash-can"></i></a>
+        `
+        <div id="note${note.id}" class="accordion-item note mb-4">
+            <div class="accordion-header" id="video-1">
+                <button class="accordion-button py-2" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+                    <div>
+                        <input class="h5 mb-1" name="title${note.id}" type="text" value="${note.title}" placeholder="Note Title" disabled><br>
+                        <small>${convertSecondsToString(note.timestamp)} &nbsp; | &nbsp; ${note.trn_date}</small>
+                    </div>
+                </button>
+               
+            </div>
+            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="video-1">
+                <div class="accordion-body">
+                    <textarea class="form-control w-100 px-0" name="note${note.id}" type="text" placeholder="Note" oninput="calcTextAreaHeight(${note.id});" disabled>${note.note}</textarea>
+                </div>
+                <div class="mb-2">
+                    <a class="jaz-btn-icon btn-play btn text-info" onclick="player.seekTo(${note.timestamp}); player.playVideo();" title="Play at current timestamp"><i class="jaz-btn-icon btn-play fa-solid fa-play"></i></a>
+                    <a class="jaz-btn-icon btn-edit btn text-warning" onclick="makeNoteEditable(${JSON.stringify(note).split('"').join("&quot;")});" title="Edit note"><i class="jaz-btn-icon btn-edit fa-solid fa-pen"></i></a>
+                    <a class="jaz-btn-icon btn-save btn text-success d-none" title="Update Note" onclick="saveEdit(${note.id}, ${note.timestamp});"><i class="jaz-btn-icon btn-ok fa-solid fa-check"></i></a>
+                    <a class="jaz-btn-icon btn-cancel btn text-warning d-none" title="Cancel" onclick="cancelEdit(${note.id});"><i class="jaz-btn-icon btn-cancel fa-solid fa-xmark"></i></a>
+                    <a class="jaz-btn=icon btn-delete btn text-danger" onclick="deleteNoteBox(${note.id})" title="Delete Note"><i class="jaz-btn-icon btn-delete fa-solid fa-trash-can"></i></a>
+                </div>
+             </div>
         </div>`;
     $('#notes')
         .prepend(html);
