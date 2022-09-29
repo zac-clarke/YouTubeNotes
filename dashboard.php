@@ -14,6 +14,12 @@ if (!$loggedin) {
     <div class="container container-sm mt-5">
         <div class="row justify-content-center">
             <div class="col-12 col-md-7">
+                <?php if (isset($_REQUEST['first'])) : ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Registration successful!</strong> Welcome to your Dashboard
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <?php endif; ?>
                 <h1 class="text-start">Hi <?= $_SESSION['username'] ?>!</h1>
                 <p class="pt-5">Anotate your favorite Youtube Videos while you are watching</p>
                 <button data-api="add" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#video-modal">
@@ -30,11 +36,11 @@ if (!$loggedin) {
         <div id="videos-container" data-id="" class="d-flex flex-wrap justify-content-evenly" style="gap: 25px;">
             <!-- Video template -->
             <div data-role="video-template" class="d-none video " style="width:250px;">
-               
+
                 <!-- Go to Video Page image link -->
                 <div class="video-thumb shine">
                     <div><a data-role="link" href=""><img data-role="thumb" src="" alt="" class="img-fluid"></a></div>
-                    
+
                 </div>
                 <div class="d-flex flex-row justify-content-between align-items-center my-1">
                     <span data-role="date" class="text-muted fs-6 fst-italic">2022:11:11</span>

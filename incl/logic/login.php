@@ -5,7 +5,6 @@ $username_error = $password_error = $auth_error = "";
 $valid = true;
 
 if (isset($_REQUEST['login'])) {
-
     require_once("incl/logic/sanitize.php");
 
     //get input values
@@ -38,9 +37,7 @@ if (isset($_REQUEST['login'])) {
             mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password);
             mysqli_stmt_fetch($stmt);
 
-            $password = md5($password);
-
-            if ($password == $hashed_password) {
+            if (md5($password) == $hashed_password) {
                 //sucessful login
                 //get user data
                 $user = [
@@ -56,7 +53,7 @@ if (isset($_REQUEST['login'])) {
                 $_SESSION['user_id'] = $user["user_id"];
 
                 mysqli_stmt_close($stmt);
-                header('location: dashboard.php');
+                echo "<script>window.location.href='dashboard.php'</script>";
             } else {
 
                 $auth_error = "wrong username or password";
@@ -71,7 +68,7 @@ if (isset($_REQUEST['login'])) {
 
 <?php
 //Show Modal on reload on incorrect login
-if (isset($_POST['login'])) : ?>
+if (isset($_REQUEST['login'])) : ?>
     <script defer>
         //show the logon modal on reload for invalid logins      
         document.onreadystatechange = function() {

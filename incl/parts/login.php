@@ -13,7 +13,7 @@
       <div class="modal-body">
         <h3 class="text-dark">Login</h3>
         <form action="index.php " method="POST" class="px-5 needs-validation" novalidate>
-          <input type="hidden" name="login">
+          <input type="hidden" name="login" value="">
           <div class="text-danger mb-3 <?= ($auth_error == '') ? '' : 'is-invalid' ?>">
             <?= $auth_error ?>
           </div>

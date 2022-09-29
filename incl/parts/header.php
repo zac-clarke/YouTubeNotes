@@ -32,7 +32,7 @@ require_once("incl/logic/auth.php");
 
                     <?php if (!$loggedin) : ?>
                         <a class="nav-link btn fw-bold py-1 px-1" href="#" id="btn_login" data-bs-toggle="modal" data-bs-target="#login-modal">Login</a>
-                        <a class="nav-link btn fw-bold py-1 px-1" href="#" data-bs-toggle="modal" data-bs-target="#signup">Signup</a>
+                        <a class="nav-link btn fw-bold py-1 px-1" href="#" id="btn_signup" data-bs-toggle="modal" data-bs-target="#signup">Signup</a>
                     <?php else : ?>
                         <a class="nav-link fw-bold py-1 px-1 active" aria-current="page" href="dashboard.php">Dashboard</a>
                         <a class="nav-link fw-bold py-1 px-1" href="incl/logic/logout.php">Logout</a>
