@@ -107,24 +107,15 @@ function editVideo()
     $title = sanitize($_REQUEST['title']);
     $url = sanitize($_REQUEST['url']);
     $yt_id =  extract_id(VIDEO_URL_REGEX, $url);
-    echo $yt_id;
     $valid = validateVideoinputs($url, $title);
 
     if ($valid) {
         $stmt = $pdo->prepare("UPDATE videos SET title=?, url=?, yt_id=? WHERE id=? AND  userid=?");
        
         if ($stmt->execute([$title, $url, $yt_id, $id, $userid])) {
-            throw new Exception('statement executed', 400);
-        } else {
-            throw new Exception('statement not executed: '.$pdo-> errorInfo(), 400);
-        }
-        
-        
-        
-        // && $stmt->rowCount()) {
-        //     return getUserVideo($id);
-        // } else
-        //     throw new Exception('Unable to update video', 400);
+            return getUserVideo($id);
+        } else
+            throw new Exception('Unable to update video', 400); 
     } else {
         throw new Exception('Input Failed validation', 422);
     }

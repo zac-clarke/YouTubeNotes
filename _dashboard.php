@@ -23,7 +23,7 @@ if (!$loggedin) {
         <!-- Videos Container -->
         <div id="videos-container" data-id="" class="d-flex flex-wrap justify-content-evenly" style="gap: 25px;">
         <!-- Video template -->
-            <div data-role="video" class="video" style="width:250px;">
+            <div data-role="video-template" class="d-none video" style="width:250px;">
                 <h5 data-role="title" class="title">Title</h5>
                 <!-- Go to Video Page image link -->
                 <a data-role="link" href=""><img data-role="thumb" src="" alt="" class="img-fluid"></a>

@@ -43,8 +43,11 @@ define("VIDEO_TITLE_MAX", "128");
           <div id="server-feedback" class="mb-3">
           </div>
 
-          <button id="submit" class="btn btn-primary mt-3">
-            Button
+          <button id="submit_video" class="d-none btn btn-primary mt-3">
+            Submit
+          </button>
+          <button id="update_video" class="d-none btn btn-primary mt-3">
+            Update
           </button>
         </form>
 
