@@ -39,11 +39,9 @@ if (!$loggedin) {
                 <div class="d-flex flex-row justify-content-between align-items-center my-1">
                     <span data-role="date" class="text-muted fs-6 fst-italic">2022:11:11</span>
                     <p class="mb-0">
-                        <!-- Edit Video Button -->
-                        <i data-api="edit" data-id="" class="hover-fx fa-solid fa-pen-to-square" data-bs-toggle="modal" data-bs-target="#video-modal"></i>
-                        <!-- Delete Video Button -->
-                        <!-- TODO : Add delete confirmation modal -->
-                        <i data-api="delete" data-id="" class="hover-fx ms-2 fa-solid fa-trash"></i>
+                        <!-- Edit Buttons -->
+                        <i data-api="edit" data-id="" class="jaz-btn-icon btn-edit fa-solid fa-pen-to-square" data-bs-toggle="modal" data-bs-target="#video-modal"></i>
+                        <i data-api="delete" data-id="" class="jaz-btn-icon btn-delete ms-2 fa-solid fa-trash"></i>
                     </p>
                 </div>
                 <p data-role="title" class="fs-5">Title</p>

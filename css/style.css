@@ -1,3 +1,19 @@
+/*Global Colors*/
+
+:root {
+    --main-bg-color-light:#E8E8E8;
+    --main-bg-color-dark:#ffffff1a;
+
+    --color-edit:#d8c112;
+    --color-cancel:#d46f44;
+    --color-delete:#d46f44;
+    --color-confirm:#29c947;
+    --color-play:#246bbc;
+
+    --color-error:red;
+  }
+
+
 /* Dashboard */
 
 .video-thumb {
@@ -44,18 +60,18 @@
 }
 
 /*Icon effects*/
-i.hover-fx {
+i.jaz-btn-icon {
     font-size: 1rem;
     color: white;
     position: relative;
     border-radius: 50%;
-    padding: 5px 6px;
+    padding: 7px 8px;
     margin: 3px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     transition: color 0.2s ease, background-color 0.2s ease, transform 0.3s ease;
 }
 
-i.hover-fx:after {
+i.jaz-btn-icon:after {
     content: "";
     width: 100%;
     height: 100%;
@@ -68,37 +84,72 @@ i.hover-fx:after {
     transition: all 0.3s ease;
 }
 
-i.hover-fx:hover:after {
+i.jaz-btn-icon:hover:after {
     transform: scale(1);
     box-shadow: 10px 0 20px rgba(0, 0, 0, 0.19), 6px 0 6px rgba(0, 0, 0, 0.23);
 }
 
-i.hover-fx:nth-of-type(1) {
-    background-color: #d8c112;
+i.jaz-btn-icon.btn-edit {
+    background-color: var(--color-edit);
 }
 
-i.hover-fx:nth-of-type(1):hover{
-    color: #d8c112;
+i.jaz-btn-icon.btn-edit:hover{
+    color: var(--color-edit);
 }
 
-i.hover-fx:nth-of-type(1):after {
-    border-color:  #d8c112;
+i.jaz-btn-icon.btn-edit:after {
+    border-color:  var(--color-edit);
 }
 
-i.hover-fx:nth-of-type(2) {
-    background-color: #d46f44;
+i.jaz-btn-icon.btn-delete {
+    background-color: var(--color-delete);
 }
 
-i.hover-fx:nth-of-type(2):hover {
-    color: #d46f44;
+i.jaz-btn-icon.btn-delete:hover {
+    color: var(--color-delete);
 }
 
-i.hover-fx:nth-of-type(2):after {
-    border-color: #d46f44;
+i.jaz-btn-icon.btn-delete:after {
+    border-color: var(--color-delete);
+}
+
+i.jaz-btn-icon.btn-cancel {
+    background-color: var(--color-cancel);
+}
+
+i.jaz-btn-icon.btn-cancel:hover {
+    color: var(--color-cancel)
+}
+
+i.jaz-btn-icon.btn-cancel:after {
+    border-color: var(--color-cancel);
+}
+i.jaz-btn-icon.btn-ok {
+    background-color: var(--color-confirm);
+}
+
+i.jaz-btn-icon.btn-ok:hover {
+    color: var(--color-confirm);
+}
+
+i.jaz-btn-icon.btn-ok:after {
+    border-color: var(--color-confirm);
+}
+
+i.jaz-btn-icon.btn-play {
+    background-color: var(--color-play);
+}
+
+i.jaz-btn-icon.btn-play:hover {
+    color: var(--color-play);
+}
+
+i.jaz-btn-icon.btn-play:after {
+    border-color: var(--color-play);
 }
 
 
-i.hover-fx:hover {
+i.jaz-btn-icon:hover {
     background-color: transparent;
     transform: rotate(90deg);
     cursor: pointer;
@@ -106,20 +157,42 @@ i.hover-fx:hover {
 }
 
 /*Video Page*/
+
+/*Notes*/
+.note {
+    background-color: white;
+    border-radius: 7px;
+    box-shadow: 0 0 5px 1px rgb(0 0 0 / 25%);
+}
+.note input,
+.note textarea {
+    border-radius: 5px;
+}
+
+.note input[disabled],
+.note textarea[disabled] {
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+input.has-error::placeholder {
+    color: var(--color-error);
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: rgba(255, 255, 255, 0);
+}
+
+/* Dark Theme */
+body.text-bg-dark .note input[disabled],
+body.text-bg-dark .note textarea[disabled] {
+    color: white;
+    background-color: rgba(0, 0, 0, 0);
+}
+
 body.text-bg-dark .note input,
 body.text-bg-dark .note textarea {
     color: white;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 5px;
-}
-
-body.text-bg-dark .note input[disabled],
-body.text-bg-dark .note textarea[disabled] {
-    color: white;
-    background-color: rgba(0, 0, 0, 0);
-    border: none;
-}
-
-body.text-bg-dark input.has-error::placeholder {
-    color: red;
 }
