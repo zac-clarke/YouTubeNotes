@@ -19,7 +19,7 @@ require_once ("incl/logic/auth.php");
     <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body class="d-flex h-100 text-center text-bg-dark">
+<body class="d-flex h-100 text-center text-bg-light" style="background-color:#E8E8E8!important">
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
         <!-- Header -->
         <header class="mb-auto">

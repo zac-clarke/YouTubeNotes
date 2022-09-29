@@ -1,11 +1,4 @@
 <!-- Modal -->
-<?php
-// require_once "incl/logic/add-edit-video.php"; 
-define("VIDEO_URL_REGEX", "^(?:(?:https?:)?//)?(?:(?:www|m)\.)?(?:(?:youtube(?:-nocookie)?\.com|youtu.be))(?:/(?:[\w-]+\?v=|embed/|v/)?)(?<video_id>[\w-]+)(?:\S+)?$");
-define("VIDEO_URL_MAX", "128");
-define("VIDEO_TITLE_MAX", "128");
-?>
-
 <div class="modal" id="video-modal" tabindex="-1" aria-labelledby="AddVideoPopup" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -40,7 +33,7 @@ define("VIDEO_TITLE_MAX", "128");
             </div>
           </div>
 
-          <div id="server-feedback" class="mb-3">
+          <div id="server-feedback" class="my-3">
           </div>
 
           <button id="submit_video" class="d-none btn btn-primary mt-3">

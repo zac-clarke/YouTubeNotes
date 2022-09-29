@@ -1,3 +1,6 @@
+//SETUP
+let numVideos = 0;
+
 //video template elements
 const $videosContainer = $("#videos-container");
 const $template = $videosContainer.find('[data-role="video-template"]');
@@ -14,6 +17,7 @@ const $submit_video = $modal.find("#submit_video");
 const $update_video = $modal.find("#update_video");
 const $feedback = $modal.find("#server-feedback");
 
+//add event listeners
 $(document).ready(function () {
   $('[data-api="add"]').on("click", function () {
     modifyForm();
@@ -30,6 +34,8 @@ $(document).ready(function () {
 });
 
 //REQUESTS
+
+//GET ALL
 function getVideos() {
   $.ajax({
     method: "GET",
@@ -40,15 +46,17 @@ function getVideos() {
     },
     success: function (data, textStatus, xhr) {
       if (xhr.status == 204) {
-        $message.text(`you do not have any videos yet`);
+        $message.text(`You do not have any videos in your library`);
       } else {
-        $message.text(`You have ${data.videos.length} in your library.`);
+        numVideos = data.videos.length;
+        $message.text(`You have ${numVideos} in your library.`);
         diplayAllVideos(data.videos);
       }
     },
   });
 }
 
+//GET ONE
 function addVideo() {
   if ($form[0].checkValidity()) {
     $.ajax({
@@ -61,14 +69,21 @@ function addVideo() {
         $feedback.addClass("text-danger");
       },
       success: function (data, textStatus, xhr) {
-        displayOneVideo(data.video);
+        displayOrUpdateVideo(data.video);
         $feedback.text(`Video added sucessfully`);
         $feedback.addClass("text-success");
+        numVideos++;
+        $message.html(
+          `You have <span id="num-videos">${numVideos}</span> videos`
+        );
+        $submit_video.addClass('d-none');
+        disableForm();
       },
     });
   }
 }
 
+//PUT
 function editVideo(id) {
   if ($form[0].checkValidity()) {
     $.ajax({
@@ -79,16 +94,21 @@ function editVideo(id) {
       dataType: "json",
       error: function (xhr, textStatus, errorThrown) {
         $feedback.text("Server Error: Video not updated");
+        $feedback.addClass("text-danger");
       },
       success: function (data, textStatus, xhr) {
         $video = $(`[data-role="video"][data-id="${id}"]`);
-        displayOneVideo(data.video, $video);
+        displayOrUpdateVideo(data.video, $video);
         $feedback.text("Video updated successfully");
+        $feedback.addClass("text-success");
+        $update_video.addClass('d-none');
+        disableForm();
       },
     });
   }
 }
 
+//DELETE
 function deleteVideo(id, $video) {
   //TODO: Confirmation modal
   $.ajax({
@@ -96,21 +116,28 @@ function deleteVideo(id, $video) {
     url: `api/_videos.php?id=${id}`,
     success: function (data, textStatus, xhr) {
       $video.remove();
+      numVideos--;
+      $message.html(
+        `You have <span id="num-videos">${numVideos}</span> videos`
+      );
+      if (numVideos <= 0) {
+        $message.text(`You do not have any videos in your library`);
+      }
     },
   });
 }
 
 //DISPLAY FUNCTIONS
-
 function diplayAllVideos(videos) {
   videos.forEach((video) => {
-    displayOneVideo(video);
+    displayOrUpdateVideo(video);
   });
 }
 
-function displayOneVideo(video, $video = null) {
+function displayOrUpdateVideo(video, $video = null) {
   let updating = true;
   if ($video == null) {
+    //no existin video on the page
     $video = $template.clone();
     $video.attr("data-role", "video");
     updating = false;
@@ -120,6 +147,7 @@ function displayOneVideo(video, $video = null) {
   const $title = $video.find('[data-role="title"]');
   const $thumb = $video.find('[data-role="thumb"]');
   const $link = $video.find('[data-role="link"]');
+  const $date = $video.find('[data-role="date"]');
   const $editBtn = $video.find('[data-api="edit"]');
   const $deleteBtn = $video.find('[data-api="delete"]');
 
@@ -127,14 +155,15 @@ function displayOneVideo(video, $video = null) {
   $video.attr("data-id", `${video.id}`);
   $video.removeClass("d-none");
   $title.text(video.title);
+  $date.text(video.trn_date);
   $thumb.attr("src", `https://img.youtube.com/vi/${video.yt_id}/hqdefault.jpg`);
   $link.attr("href", `video.php?id=${video.id}`);
   $editBtn.attr("data-id", `${video.id}`);
   $deleteBtn.attr("data-id", `${video.id}`);
 
   //add event listeners
-
   if (!updating) {
+    //new video
     $deleteBtn.on("click", function () {
       deleteVideo(video.id, $video);
     });
@@ -143,7 +172,7 @@ function displayOneVideo(video, $video = null) {
     });
 
     //add video
-    $video.appendTo($videosContainer);
+    $video.prependTo($videosContainer);
   }
 }
 
@@ -151,7 +180,8 @@ function displayOneVideo(video, $video = null) {
 async function modifyForm(id = 0) {
   if (!id) {
     //new vedio
-    //reset values
+
+    //empty input values
     $url.val("");
     if ($url.hasClass("is-invalid")) {
       $url.classList.remove("is-invalid");
@@ -216,4 +246,14 @@ function resetForm() {
   $feedback.text("");
   if ($feedback.hasClass("text-danger")) $feedback.removeClass("text-danger");
   if ($feedback.hasClass("text-success")) $feedback.removeClass("text-success");
+
+  if ($submit_video.hasClass("d-none")) $submit_video.removeClass("d-none");
+  if ($update_video.hasClass("d-none")) $update_video.removeClass("d-none");
+  $url.removeAttr('disabled');
+  $title.removeAttr('disabled');
+}
+
+function disableForm () {
+  $url.attr('disabled','disabled');
+  $title.attr('disabled','disabled');
 }

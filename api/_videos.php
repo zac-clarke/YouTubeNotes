@@ -1,12 +1,8 @@
 <?php
 require_once("../config/db-pdo.php");
+require_once("../config/constants.php");
 require_once("../incl/logic/auth.php");
 require_once("../incl/logic/sanitize.php");
-
-//validation rules
-define("VIDEO_URL_REGEX", "^(?:(?:https?:)?//)?(?:(?:www|m)\.)?(?:(?:youtube(?:-nocookie)?\.com|youtu.be))(?:/(?:[\w-]+\?v=|embed/|v/)?)(?<video_id>[\w-]+)(?:\S+)?$");
-define("VIDEO_URL_MAX", "128");
-define("VIDEO_TITLE_MAX", "128");
 
 $response = array();
 try {
@@ -71,7 +67,7 @@ function getUserVideos()
 {
     global $pdo;
     $userid = $_SESSION['user_id'];
-    $stmt = $pdo->prepare("SELECT * FROM videos WHERE userid=?;");
+    $stmt = $pdo->prepare("SELECT * FROM videos WHERE userid=? ORDER BY trn_date ASC;");
     //if query is executed successfully AND at least one video is found
     if ($stmt->execute([$userid]) && $stmt->rowCount())
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
