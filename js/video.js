@@ -172,7 +172,7 @@ function addNoteBox(note) {
             <a class="btn-delete btn text-danger" onclick="deleteNoteBox(${note.id})" title="Delete Note"><i class="fa-solid fa-trash-can"></i></a>
         </div>`;
     $('#notes')
-        .append(html);
+        .prepend(html);
     calcTextAreaHeight(note.id);
 }
 
