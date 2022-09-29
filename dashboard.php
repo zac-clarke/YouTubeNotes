@@ -37,7 +37,7 @@ if (!$loggedin) {
                     
                 </div>
                 <div class="d-flex flex-row justify-content-between align-items-center my-1">
-                    <span data-role="date" class="text-muted">2022:11:11</span>
+                    <span data-role="date" class="text-muted fs-6 fst-italic">2022:11:11</span>
                     <p class="mb-0">
                         <!-- Edit Video Button -->
                         <i data-api="edit" data-id="" class="hover-fx fa-solid fa-pen-to-square" data-bs-toggle="modal" data-bs-target="#video-modal"></i>

@@ -155,7 +155,7 @@ function displayOrUpdateVideo(video, $video = null) {
   $video.attr("data-id", `${video.id}`);
   $video.removeClass("d-none");
   $title.text(video.title);
-  $date.text(video.trn_date);
+  $date.text(video.trn_date.substring(0,10));
   $thumb.attr("src", `https://img.youtube.com/vi/${video.yt_id}/hqdefault.jpg`);
   $link.attr("href", `video.php?id=${video.id}`);
   $editBtn.attr("data-id", `${video.id}`);
@@ -249,6 +249,7 @@ function resetForm() {
 
   if ($submit_video.hasClass("d-none")) $submit_video.removeClass("d-none");
   if ($update_video.hasClass("d-none")) $update_video.removeClass("d-none");
+  
   $url.removeAttr('disabled');
   $title.removeAttr('disabled');
 }
