@@ -66,7 +66,7 @@ function loadVideoSection($video)
         <h1 class="py-5"><?= $video->title ?></h1>
         <h4 class="d-none">TODO: Metada from Youtube API if possible</h4>
         <!-- The <iframe> (and video player) will replace this <div> tag. -->
-        <div id="player" data-url="<?= $video->url ?>"></div>
+        <div id="player" data-yt-id="<?= $video->yt_id ?>"></div>
         <br>
         <button id="btn-add-note" class="btn btn-primary px-4 py-2 mt-3 mb-5" data-bs-toggle="modal" data-bs-target="#modalNote" title="Pauses the video and adds a note at the current timestamp">
             Add Note

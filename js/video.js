@@ -362,16 +362,11 @@ function showYoutubePlayer() {
  * This function creates an <iframe> (and YouTube player) after the API code downloads.
  */
 function onYouTubeIframeAPIReady() {
-    var url_string = $('#player').data('url');
-    let videoid = '';
-    try {
-        var url = new URL(url_string);
-        videoid = url.searchParams.get("v");
-    } catch (e) {}
+    let ytId = $('#player').data('yt-id');
     player = new YT.Player('player', {
         height: window.screen.height * 0.55,
         width: window.screen.width * 0.7,
-        videoId: videoid,
+        videoId: ytId,
         playerVars: {
             'playsinline': 1
         },
