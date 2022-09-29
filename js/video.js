@@ -132,7 +132,6 @@ function getNotesFromDb(order) {
             $('#notes')
                 .html('') // Empty the div
                 .removeClass('text-danger');
-            alert(data)
             JSON.parse(data)["notes"].forEach(note => {
                 addNoteBox(note);
             });
