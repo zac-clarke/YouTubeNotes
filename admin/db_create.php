@@ -16,7 +16,7 @@ $create_tbl_users = "CREATE TABLE IF NOT EXISTS `users` (
     CONSTRAINT uq_users_email UNIQUE (email)
 );";
 if (!mysqli_query($conn, $create_tbl_users)) {
-    echo mysqli_error($conn);
+    die(mysqli_error($conn));
 }
 
 $create_tbl_videos = "CREATE TABLE IF NOT EXISTS `videos` (
@@ -30,7 +30,7 @@ $create_tbl_videos = "CREATE TABLE IF NOT EXISTS `videos` (
     CONSTRAINT fk_videos_userid FOREIGN KEY (userid) REFERENCES `users` (id)
 );";
 if (!mysqli_query($conn, $create_tbl_videos)) {
-    echo mysqli_error($conn);
+    die(mysqli_error($conn));
 }
 
 $create_tbl_notes = "CREATE TABLE IF NOT EXISTS `notes` (
@@ -44,5 +44,7 @@ $create_tbl_notes = "CREATE TABLE IF NOT EXISTS `notes` (
     CONSTRAINT fk_notes_videoid FOREIGN KEY (videoid) REFERENCES `videos` (id)
 );";
 if (!mysqli_query($conn, $create_tbl_notes)) {
-    echo mysqli_error($conn);
+    die(mysqli_error($conn));
 }
+
+echo "Database created successfully";
