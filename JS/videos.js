@@ -249,7 +249,7 @@ function resetForm() {
 
   if ($submit_video.hasClass("d-none")) $submit_video.removeClass("d-none");
   if ($update_video.hasClass("d-none")) $update_video.removeClass("d-none");
-  
+
   $url.removeAttr('disabled');
   $title.removeAttr('disabled');
 }
