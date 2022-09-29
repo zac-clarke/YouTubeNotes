@@ -35,10 +35,10 @@
         })
 })()
 
-document.getElementById('signup').addEventListener('shown.bs.modal', onModalNoteShow);
-function onModalNoteShow() {
-  let form = modalNote.querySelector('form');
-  if (!form.checkValidity()) {
-    modalNote.querySelector('button[type="submit"]').click();
-  }
-}
+// document.getElementById('signup').addEventListener('shown.bs.modal', onModalNoteShow);
+// function onModalNoteShow() {
+//   let form = modalNote.querySelector('form');
+//   if (!form.checkValidity()) {
+//     modalNote.querySelector('button[type="submit"]').click();
+//   }
+// }
