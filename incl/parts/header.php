@@ -25,7 +25,7 @@ require_once("incl/logic/auth.php");
         <header class="mb-auto">
             <div>
                 <a href="index.php">
-                    <h3 class="float-md-start mb-0">Logo</h3>
+                    <h3 class="float-md-start mb-0"><img src="img/logo.png" alt="you study logo" width=100></h3>
                 </a>
                 <!-- NAV -->
                 <nav class="nav nav-masthead justify-content-center float-md-end">

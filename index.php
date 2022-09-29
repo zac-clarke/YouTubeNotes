@@ -15,10 +15,10 @@
         <h2>How does it work?</h2>
     </div>
 
-    <div class="container">
+    <div class="container-sm">
 
-        <div class="row">
-            <div class=" col">
+        <div class="row container-sm">
+            <div class=" col mb-4">
                 <img src="img/addVideo.png" alt="add video modal" width=400>
                 <h3>Add videos!</h3>
                 <p>
@@ -26,7 +26,7 @@
                     allowing you to keep track of videos you need to study!
                 </p>
             </div>
-            <div class=" col">
+            <div class=" col mb-4">
                 <img src="img/video-placeholder.jpg" width=400 height=242>
                 <h3>Add notes to videos!</h3>
                 <p>
@@ -34,7 +34,7 @@
                     keep the time in the video that you wrote it!
                 </p>
             </div>
-            <div class=" col">
+            <div class=" col mb-4">
                 <img src="img/video-placeholder.jpg" width=400 height=242>
                 <h3>Review your notes!</h3>
                 <p>
@@ -43,6 +43,10 @@
                 </p>
             </div>
         </div>
+    </div>
+    <div class="container mb-5 mt-5">
+        <h3>Sign up now!</h3>
+        <a class="btn btn-primary" href="#" id="btn_signup" data-bs-toggle="modal" data-bs-target="#signup">Signup</a>
     </div>
 
 </main>

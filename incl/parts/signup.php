@@ -48,7 +48,7 @@
             </div>
             <p class="text-danger"><?= $password_error ?></p>
           </div>
-          <div class="form-group ">
+          <div class="form-group mb-3 ">
             <input type="submit" name="submit" class="btn btn-primary" onclick="" value="Sign Up"></input>
           </div>
 
@@ -58,9 +58,7 @@
 
 
       </div>
-      <div class="modal-footer">
-        some footer
-      </div>
+      
     </div>
   </div>
 </div>
