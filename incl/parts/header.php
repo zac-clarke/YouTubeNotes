@@ -25,14 +25,14 @@ require_once("incl/logic/auth.php");
         <header class="mb-auto">
             <div>
                 <a href="index.php">
-                    <h3 class="float-md-start mb-0">Logo</h3>
+                    <h3 class="float-md-start mb-0"><img src="img/logo.png" alt="you study logo" width=100></h3>
                 </a>
                 <!-- NAV -->
                 <nav class="nav nav-masthead justify-content-center float-md-end">
 
                     <?php if (!$loggedin) : ?>
                         <a class="nav-link btn fw-bold py-1 px-1" href="#" id="btn_login" data-bs-toggle="modal" data-bs-target="#login-modal">Login</a>
-                        <a class="nav-link btn fw-bold py-1 px-1" href="#" data-bs-toggle="modal" data-bs-target="#signup">Signup</a>
+                        <a class="nav-link btn fw-bold py-1 px-1" href="#" id="btn_signup" data-bs-toggle="modal" data-bs-target="#signup">Signup</a>
                     <?php else : ?>
                         <a class="nav-link fw-bold py-1 px-1 active" aria-current="page" href="dashboard.php">Dashboard</a>
                         <a class="nav-link fw-bold py-1 px-1" href="incl/logic/logout.php">Logout</a>

@@ -135,6 +135,7 @@ function getNotesFromDb(order) {
     $.ajax({
         method: 'GET',
         url: `api/notes.php?user_id=${user_id}&videoid=${videoid}&order=${encodeURIComponent(order)}`,
+        timeout: 10000,
         error: function (xhr) {
             // "responseText": "{"error": "Missing Parameters"}"
             // "status": 422
@@ -248,6 +249,7 @@ function saveEdit(id, timestamp) {
         $.ajax({
             method: 'PUT',
             url: `api/notes.php?user_id=${user_id}&id=${id}&videoid=${videoid}&title=${encodeURIComponent(fieldTitle.val())}&note=${encodeURIComponent(fieldNote.val())}&timestamp=${timestamp}`,
+            timeout: 10000,
             beforeSend: function () {
                 editing.set(id, true);
                 $(`${divID} .btn-save`)
@@ -312,6 +314,7 @@ function deleteNoteBox(id) {
         $.ajax({
             method: 'DELETE',
             url: `api/notes.php?user_id=${user_id}&id=${id}`,
+            timeout: 10000,
             beforeSend: function () {
                 deleting.set(id, true);
 
