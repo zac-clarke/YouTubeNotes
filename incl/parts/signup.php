@@ -1,4 +1,4 @@
-<!-- SIGNUP MODAL -->
+<!-- Modal -->
 <?php require_once "incl/logic/signup.php"; ?>
 <script defer src="JS/dis_sub.js"></script>
 
@@ -20,7 +20,7 @@
 
           <input type="hidden" name="signup">
           <div class="form-group ">
-            <input type="text" name="username" class="form-control <?php if($username_error!='&nbsp;')echo 'is-invalid';?> "placeholder="Username" value="<?=$username?>" required>
+            <input type="text" name="username" class="form-control <?php if($username_error!='&nbsp;')echo 'is-invalid';?> " placeholder="Username" value="<?=$username?>" required>
             <div class="valid-feedback">
               Valid Username
             </div>
