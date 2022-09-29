@@ -5,6 +5,7 @@ var player;
 var videoid = getParam('videoid');
 /** @type {String} Keeps track of the last sort method used*/
 var lastSort = "trn_date DESC";
+var user_id = document.querySelector('script[src="js/video.js"]').classList[0];
 
 $('#modalNote')
     .on('shown.bs.modal', onModalNoteShow);
@@ -82,7 +83,7 @@ function addNoteToDb() {
         let timestamp = $('input[name="timestamp"]')
         $.ajax({
             method: 'POST',
-            url: '../api/notes.php',
+            url: `../api/notes.php?user_id=${user_id}`,
             data: {
                 videoid: videoid,
                 title: title.val(),
@@ -133,7 +134,7 @@ function addNoteToDb() {
 function getNotesFromDb(order) {
     $.ajax({
         method: 'GET',
-        url: `../api/notes.php?videoid=${videoid}&order=${encodeURIComponent(order)}`,
+        url: `../api/notes.php?user_id=${user_id}&videoid=${videoid}&order=${encodeURIComponent(order)}`,
         error: function (xhr) {
             // "responseText": "{"error": "Missing Parameters"}"
             // "status": 422
@@ -231,7 +232,7 @@ function saveEdit(id, timestamp) {
             .prop('placeholder', 'Note Title');
         $.ajax({
             method: 'PUT',
-            url: `../api/notes.php?id=${id}&videoid=${videoid}&title=${encodeURIComponent(fieldTitle.val())}&note=${encodeURIComponent(fieldNote.val())}&timestamp=${timestamp}`,
+            url: `../api/notes.php?user_id=${user_id}&id=${id}&videoid=${videoid}&title=${encodeURIComponent(fieldTitle.val())}&note=${encodeURIComponent(fieldNote.val())}&timestamp=${timestamp}`,
             beforeSend: function () {
                 editing.set(id, true);
                 $(`${divID} .btn-save`)
@@ -295,7 +296,7 @@ function deleteNoteBox(id) {
     if (!deleting.get(id))
         $.ajax({
             method: 'DELETE',
-            url: '../api/notes.php?id=' + id,
+            url: `../api/notes.php?user_id=${user_id}&id=${id}`,
             beforeSend: function () {
                 deleting.set(id, true);
 

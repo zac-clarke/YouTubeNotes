@@ -21,7 +21,8 @@ try {
  */
 function loadPage($video)
 { ?>
-    <script src='js/video.js' defer></script>
+    <script src='js/video.js' class="<?php global $user_id;
+                                        echo $user_id ?>" defer></script>
 <?php
     loadVideoSection($video); // load video section (up to Add Note button)
     loadNotesSection($video); // load notes section (after Add Note button)
