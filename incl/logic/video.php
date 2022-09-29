@@ -17,6 +17,7 @@ try {
 
 /**
  * Loads the page
+ * @param Object video
  */
 function loadPage($video)
 { ?>

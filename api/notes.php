@@ -35,7 +35,7 @@ try {
             break;
     }
 } catch (Exception $e) {
-    if (preg_match("/[A-z]/", $e->getCode())) { // if the error code has a letter in it, it was sent by the DB
+    if (preg_match("/[A-z]/", $e->getCode())) { // if the error code has a letter in it, it was sent by MySQL
         http_response_code(400);
         $response["error"] = $e->getCode() . ": " . $e->getMessage();
     } else {
@@ -64,6 +64,7 @@ function getNoteFromDb($id)
 /**
  * Fetches notes linked to a videoid from the database
  * @param number $videoid The id of the video
+ * @param String $order The ORDER BY value
  * @return Object[] An array of notes
  */
 function getNotesFromDb($videoid, $order = "date desc")
@@ -76,6 +77,13 @@ function getNotesFromDb($videoid, $order = "date desc")
         throw new Exception('No Notes found', 204);
 }
 
+/**
+ * Inserts a note to the database
+ * @param Number $videoid The video ID linked to this note
+ * @param String $title Title of the note
+ * @param String $note The content of the note
+ * @param Number $timestamp The timestamp where the note is saved (in seconds (float))
+ */
 function addNoteToDb($videoid, $title, $note, $timestamp)
 {
     global $pdo;
@@ -86,6 +94,14 @@ function addNoteToDb($videoid, $title, $note, $timestamp)
         throw new Exception('Unable to add note', 400);
 }
 
+/**
+ * Updates a note in the database
+ * @param Number $id The ID of the note
+ * @param Number $videoid The video ID linked to this note
+ * @param String $title Title of the note
+ * @param String $note The content of the note
+ * @param Number $timestamp The timestamp where the note is saved (in seconds (float))
+ */
 function editNoteInDb($id, $videoid, $title, $note, $timestamp)
 {
     global $pdo;
@@ -96,6 +112,10 @@ function editNoteInDb($id, $videoid, $title, $note, $timestamp)
         throw new Exception('Unable to update note', 400);
 }
 
+/**
+ * Deletes a note from the database
+ * @param Number $id The ID of the note
+ */
 function deleteNoteFromDb($id)
 {
     global $pdo;

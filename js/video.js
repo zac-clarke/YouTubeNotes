@@ -1,29 +1,27 @@
-/** @type {YT.Player} */
+// TODO: Store notes in an array for quicker sort
+/** @type {YT.Player} The YouTube player object*/
 var player;
-var curTime = 0;
+/** @type {Number} The db id of the current video*/
 var videoid = getParam('videoid');
+/** @type {String} Keeps track of the last sort method used*/
 var lastSort = "trn_date DESC";
 
-disableFormSubmission();
 $('#modalNote')
     .on('shown.bs.modal', onModalNoteShow);
 $('#btn-submit')
     .on('click', addNoteToDb);
 showYoutubePlayer();
-getNotesFromDb('trn_date DESC');
+getNotesFromDb(lastSort);
 
 /**
  * EventListener for when modalNote is shown
  */
 function onModalNoteShow() {
     pauseVideo();
-    let modalNote = document.getElementById('modalNote');
-    let form = modalNote.querySelector('form');
     let curTimestamp = player.getCurrentTime();
-    form.querySelector('input[name="timestamp"]').value = curTimestamp;
-    let modalTitle = document.getElementById('modalNoteLabel');
-    modalTitle.textContent = 'Add Note @' + convertSecondsToString(curTimestamp);
-    form.querySelectorAll('input, textarea').forEach(input => input.addEventListener('input', () => {
+    $('#modalNote form input[name="timestamp"]').val(curTimestamp);
+    $('#modalNoteLabel').text('Add Note @' + convertSecondsToString(curTimestamp));
+    document.querySelectorAll('#modalNote form input, #modalNote form textarea').forEach(input => input.addEventListener('input', () => {
         if (input.checkValidity()) {
             input.classList.add("is-valid")
             input.classList.remove("is-invalid")
@@ -34,24 +32,26 @@ function onModalNoteShow() {
     }));
 }
 
+/**
+ * Gets note from the DB ordered by timestamp. Toggles ASC/DESC if lastSort was timestamp
+ */
 function orderByTimestamp() {
-    if (lastSort == 'timestamp ASC') {
-        lastSort = 'timestamp DESC'
-    } else {
-        lastSort = 'timestamp ASC'
-    }
+    lastSort = lastSort == 'timestamp ASC' ? 'timestamp DESC' : 'timestamp ASC';
     getNotesFromDb(lastSort)
 }
 
+/**
+ * Gets note from the DB ordered by trn_date. Toggles ASC/DESC if lastSort was trn_date
+ */
 function orderByDate() {
-    if (lastSort == 'trn_date ASC') {
-        lastSort = 'trn_date DESC'
-    } else {
-        lastSort = 'trn_date ASC'
-    }
+    lastSort = lastSort == 'trn_date ASC' ? 'trn_date DESC' : 'trn_date ASC';
     getNotesFromDb(lastSort)
 }
 
+/**
+ * Calculates the number of rows and columns to be displayed for a textArea
+ * @param {Number} id ID of Note
+ */
 function calcTextAreaHeight(id) {
     $textarea = $(`textarea[name="note${id}"]`);
     let noteLength = $textarea
@@ -63,13 +63,19 @@ function calcTextAreaHeight(id) {
     if (lines > rows)
         rows = lines;
     $textarea
-        .prop('rows', (rows > 10) ? 10 : ((rows < 3) ? 3 : rows))
-        .prop('cols', cols);
+        .prop('cols', cols)
+        .prop('rows', rows > 10 ? 10 :
+            rows < 3 ? 3 :
+            rows);
 }
 
+/** @type {Boolean} Throttle for the Add button*/
 let isAdding = false;
+/**
+ * Checks validity and adds the values of the Modal Form to the DB
+ */
 function addNoteToDb() {
-    if (!isAdding && document.getElementById('form-note').checkValidity()) {
+    if (!isAdding && $('#form-note')[0].checkValidity()) {
         isAdding = true;
         let title = $('input[name="title"]');
         let note = $('textarea[name="note"]');
@@ -77,7 +83,12 @@ function addNoteToDb() {
         $.ajax({
             method: 'POST',
             url: '../api/notes.php',
-            data: { videoid: videoid, title: title.val(), note: note.val(), timestamp: timestamp.val() },
+            data: {
+                videoid: videoid,
+                title: title.val(),
+                note: note.val(),
+                timestamp: timestamp.val()
+            },
             timeout: 10000,
             beforeSend: function () {
                 title.prop('disabled', true)
@@ -89,7 +100,7 @@ function addNoteToDb() {
                 // "status": 422
                 alert(xhr.status + ': ' + JSON.parse(xhr.responseText).error)
             },
-            success: function (/** @type {String} */data, textStatus, xhr) {
+            success: function ( /** @type {String} */ data, textStatus, xhr) {
                 let note = JSON.parse(data)["note"];
                 addNoteBox(note);
                 $('#modalNote')
@@ -115,6 +126,10 @@ function addNoteToDb() {
     }
 }
 
+/**
+ * Gets all the Notes for the current videoID and calls the addNoteBox function for each note
+ * @param {String} order The ORDER BY value
+ */
 function getNotesFromDb(order) {
     $.ajax({
         method: 'GET',
@@ -125,7 +140,7 @@ function getNotesFromDb(order) {
             $('#notes')
                 .html('<h2 class="text-danger">An error occured while loading the Notes for this video</h2>')
         },
-        success: function (/** @type {String} */data, textStatus, xhr) {
+        success: function ( /** @type {String} */ data, textStatus, xhr) {
             if (xhr.status == 204)
                 return $('#notes')
                     .html('<h4 class="text-danger">You don\'t have any notes yet!<br>Click the button above to add one.</h4>')
@@ -139,9 +154,11 @@ function getNotesFromDb(order) {
     });
 }
 
+/**
+ * Creates a new div and fills it with a note
+ * @param {Object} note 
+ */
 function addNoteBox(note) {
-    //TODO : Edit button
-    //  onclick="openEditModal(${JSON.stringify(note).split('"').join("&quot;")})"
     let html =
         `<div id="note${note.id}" class="note p-4">
             <input name="title${note.id}" type="text" value="${note.title}" placeholder="Note Title" disabled>
@@ -158,7 +175,24 @@ function addNoteBox(note) {
     calcTextAreaHeight(note.id);
 }
 
+/** @type {Map} Keeps track of each note being edited. Throttles it and stores initial values in case of a cancel*/
 var editing = new Map();
+
+/**
+ * Removes the note from the editing Map
+ * @param {Number} id 
+ */
+function clearEditing(id) {
+    editing.delete(id);
+    editing.delete(id + 'title');
+    editing.delete(id + 'note');
+}
+
+/**
+ * Makes the input and the textarea of the current note editable by removing the disabled property.
+ * Also, hides the play and edit button + shows the save and cancel buttons
+ * @param {Object} note 
+ */
 function makeNoteEditable(note) {
     // Get the id of the current div
     let id = note.id;
@@ -177,6 +211,11 @@ function makeNoteEditable(note) {
     editing.set(id + 'note', fieldNote.val());
 }
 
+/**
+ * Attempts to save the edited note to the DB
+ * @param {Number} id 
+ * @param {Number} timestamp 
+ */
 function saveEdit(id, timestamp) {
     let divID = '#note' + id;
     var fieldTitle = $(`${divID} input`);
@@ -201,9 +240,11 @@ function saveEdit(id, timestamp) {
                 $(`${divID} .btn-cancel`)
                     .removeClass('text-warning')
                     .addClass('text-white');
-            }, error: function (xhr) {
+            },
+            error: function (xhr) {
                 alert(xhr.status + ': ' + JSON.parse(xhr.responseText).error)
-            }, success: function (data) {
+            },
+            success: function (data) {
                 clearEditing(id);
                 calcTextAreaHeight(id);
                 fieldTitle.prop('disabled', true);
@@ -212,7 +253,8 @@ function saveEdit(id, timestamp) {
                     .removeClass('d-none');
                 $(`${divID} .btn-save, ${divID} .btn-cancel`)
                     .addClass('d-none');
-            }, complete: function () {
+            },
+            complete: function () {
                 $(`${divID} .btn-save`)
                     .addClass('text-success')
                     .removeClass('text-white');
@@ -224,6 +266,11 @@ function saveEdit(id, timestamp) {
     }
 }
 
+/**
+ * Cancels the note edit and reverts back to initial values.
+ * Also swaps back to the play and edit buttons under the note
+ * @param {Number} id 
+ */
 function cancelEdit(id) {
     if (!editing.get(id)) {
         let divID = '#note' + id;
@@ -242,13 +289,8 @@ function cancelEdit(id) {
     }
 }
 
-function clearEditing(id) {
-    editing.delete(id);
-    editing.delete(id + 'title');
-    editing.delete(id + 'note');
-}
-
 var deleting = new Map();
+
 function deleteNoteBox(id) {
     if (!deleting.get(id))
         $.ajax({
@@ -263,7 +305,7 @@ function deleteNoteBox(id) {
                 // "status": 422
                 alert(xhr.status + ': ' + JSON.parse(xhr.responseText).error)
             },
-            success: function (/** @type {String} */data, textStatus, xhr) {
+            success: function ( /** @type {String} */ data, textStatus, xhr) {
                 $(`#note${id}`)
                     .remove();
             },
@@ -281,30 +323,6 @@ function deleteNoteBox(id) {
 function getParam(key) {
     if (key = (new RegExp('[?&]' + encodeURIComponent(key) + '=([^&]*)')).exec(location.search))
         return decodeURIComponent(key[1]);
-}
-
-
-/**
- * Disables form submissions if there are invalid fields
- * https://getbootstrap.com/docs/5.0/forms/validation/
- */
-function disableFormSubmission() {
-    'use strict'
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    var forms = document.querySelectorAll('.needs-validation');
-
-    // Loop over them and prevent submission
-    Array.prototype.slice.call(forms)
-        .forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
-                }
-
-                form.classList.add('was-validated')
-            }, false)
-        })
 }
 
 /**
@@ -344,13 +362,12 @@ function showYoutubePlayer() {
  * This function creates an <iframe> (and YouTube player) after the API code downloads.
  */
 function onYouTubeIframeAPIReady() {
-    var url_string = document.getElementById('player').dataset.url;
-    curTime = document.getElementById('player').dataset.timestamp;
+    var url_string = $('#player').data('url');
     let videoid = '';
     try {
         var url = new URL(url_string);
         videoid = url.searchParams.get("v");
-    } catch (e) { }
+    } catch (e) {}
     player = new YT.Player('player', {
         height: window.screen.height * 0.55,
         width: window.screen.width * 0.7,
@@ -365,27 +382,21 @@ function onYouTubeIframeAPIReady() {
     });
 }
 
-var shouldPause = false;
 /**
  * The API will call this function when the video player is ready.
  * @param {*} event 
  */
-function onPlayerReady(event) {
-    if (curTime != 0) {
-        player.seekTo(curTime);
-        shouldPause = true;
-    }
-}
+function onPlayerReady(event) {}
 
 
 /**
  * The API calls this function when the player's state changes.
- * if (event.data == YT.PlayerState.PLAYING && !done)
+ * if (event.data == YT.PlayerState.PLAYING)
  * @param {*} event 
  */
 function onPlayerStateChange(event) {
-    if (event.data == YT.PlayerState.PLAYING && shouldPause)
-        player.pauseVideo();
+    // if (event.data == YT.PlayerState.PLAYING)
+    //     player.pauseVideo();
 }
 
 /**
