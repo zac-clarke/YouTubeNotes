@@ -157,7 +157,7 @@ function displayOrUpdateVideo(video, $video = null) {
   $title.text(video.title);
   $date.text(video.trn_date.substring(0,10));
   $thumb.attr("src", `https://img.youtube.com/vi/${video.yt_id}/hqdefault.jpg`);
-  $link.attr("href", `video.php?id=${video.id}`);
+  $link.attr("href", `video.php?videoid=${video.id}`);
   $editBtn.attr("data-id", `${video.id}`);
   $deleteBtn.attr("data-id", `${video.id}`);
 

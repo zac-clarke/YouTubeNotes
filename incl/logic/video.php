@@ -12,7 +12,7 @@ try {
 } catch (Exception $e) {
     showErrorNoVideoMatch('No videos found! Click <a href="javascript:history.go(-1)">here</a> to go back');
 } finally {
-    require($_SERVER['DOCUMENT_ROOT'] . "/incl/parts/footer.php");
+    require("incl/parts/footer.php");
 }
 
 /**
@@ -21,8 +21,7 @@ try {
  */
 function loadPage($video)
 { ?>
-    <script src='js/video.js' class="<?php global $user_id;
-                                        echo $user_id ?>" defer></script>
+    <script src='js/notes.js' class="<?php global $user_id; echo $user_id ?>" defer></script>
 <?php
     loadVideoSection($video); // load video section (up to Add Note button)
     loadNotesSection($video); // load notes section (after Add Note button)

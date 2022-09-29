@@ -1,4 +1,5 @@
 <?php
+require("config/db-pdo.php");
 require("incl/parts/header.php");
 require("incl/logic/video.php"); // The main logic behind the Notes page
 ?>
@@ -84,7 +85,7 @@ function loadNotesSection($video)
         <span class="h2 flex-grow-1">Your Notes</span>
         <span class="">Order by: <a href="javascript:void(null);" onclick="orderByTimestamp()">Timestamp</a> | <a href="javascript:void(null);" onclick="orderByDate()">date</a></span>
     </div>
-    <div id="notes" class="container">
-    </div>
+    <!-- All notes go in the following div -->
+    <div id="notes" class="container"></div> 
 <?php
 }

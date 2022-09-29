@@ -5,7 +5,7 @@ var player;
 var videoid = getParam('videoid');
 /** @type {String} Keeps track of the last sort method used*/
 var lastSort = "trn_date DESC";
-var user_id = document.querySelector('script[src="js/video.js"]').classList[0];
+var user_id = document.querySelector('script[src="js/notes.js"]').classList[0];
 
 $('#modalNote')
     .on('shown.bs.modal', onModalNoteShow);
@@ -83,7 +83,7 @@ function addNoteToDb() {
         let timestamp = $('input[name="timestamp"]')
         $.ajax({
             method: 'POST',
-            url: `../api/notes.php?user_id=${user_id}`,
+            url: `api/notes.php?user_id=${user_id}`,
             data: {
                 videoid: videoid,
                 title: title.val(),
@@ -134,20 +134,20 @@ function addNoteToDb() {
 function getNotesFromDb(order) {
     $.ajax({
         method: 'GET',
-        url: `../api/notes.php?user_id=${user_id}&videoid=${videoid}&order=${encodeURIComponent(order)}`,
+        url: `api/notes.php?user_id=${user_id}&videoid=${videoid}&order=${encodeURIComponent(order)}`,
         error: function (xhr) {
             // "responseText": "{"error": "Missing Parameters"}"
             // "status": 422
             $('#notes')
-                .html('<h2 class="text-danger">An error occured while loading the Notes for this video</h2>')
+                .html('<h2 class="text-warning">An error occured while loading the Notes for this video</h2>')
         },
         success: function ( /** @type {String} */ data, textStatus, xhr) {
             if (xhr.status == 204)
                 return $('#notes')
-                    .html('<h4 class="text-danger">You don\'t have any notes yet!<br>Click the button above to add one.</h4>')
+                    .html('<h6 class="no-notes">You don\'t have any notes yet!<br>Click the button above to add one.</h6>')
             $('#notes')
                 .html('') // Empty the div
-                .removeClass('text-danger');
+                .removeClass('text-warning');
             JSON.parse(data)["notes"].forEach(note => {
                 addNoteBox(note);
             });
@@ -160,6 +160,7 @@ function getNotesFromDb(order) {
  * @param {Object} note 
  */
 function addNoteBox(note) {
+    $('#notes h6.no-notes').remove();
     let html =
         `<div id="note${note.id}" class="note p-4">
             <input name="title${note.id}" type="text" value="${note.title}" placeholder="Note Title" disabled>
@@ -232,7 +233,7 @@ function saveEdit(id, timestamp) {
             .prop('placeholder', 'Note Title');
         $.ajax({
             method: 'PUT',
-            url: `../api/notes.php?user_id=${user_id}&id=${id}&videoid=${videoid}&title=${encodeURIComponent(fieldTitle.val())}&note=${encodeURIComponent(fieldNote.val())}&timestamp=${timestamp}`,
+            url: `api/notes.php?user_id=${user_id}&id=${id}&videoid=${videoid}&title=${encodeURIComponent(fieldTitle.val())}&note=${encodeURIComponent(fieldNote.val())}&timestamp=${timestamp}`,
             beforeSend: function () {
                 editing.set(id, true);
                 $(`${divID} .btn-save`)
@@ -296,7 +297,7 @@ function deleteNoteBox(id) {
     if (!deleting.get(id))
         $.ajax({
             method: 'DELETE',
-            url: `../api/notes.php?user_id=${user_id}&id=${id}`,
+            url: `api/notes.php?user_id=${user_id}&id=${id}`,
             beforeSend: function () {
                 deleting.set(id, true);
 
@@ -309,6 +310,9 @@ function deleteNoteBox(id) {
             success: function ( /** @type {String} */ data, textStatus, xhr) {
                 $(`#note${id}`)
                     .remove();
+                if ($('#notes').children().length == 0)
+                    $('#notes')
+                    .html('<h6 class="no-notes">You don\'t have any notes yet!<br>Click the button above to add one.</h6>')
             },
             complete: function () {
                 deleting.delete(id);

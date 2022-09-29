@@ -1,4 +1,4 @@
-    <footer class="mt-auto text-white-50">
+    <footer class="mt-auto">
         <p>Jaz </p>
     </footer>
 </div>
