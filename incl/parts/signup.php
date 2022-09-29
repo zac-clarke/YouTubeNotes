@@ -2,12 +2,14 @@
 <?php require_once "incl/logic/signup.php"; ?>
 <script defer src="JS/dis_sub.js"></script>
 
-<div class="modal fade" id="signup" tabindex="-1" aria-labelledby="SignupPopup" aria-hidden="true">
+
+
+<div class="modal" id="login-modal" tabindex="-1" aria-labelledby="LoginPopup" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-header border-0">
+      
+        <button type="button" class="btn-close" data-dismiss="modal" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <h3 class="text-dark">Signup</h3>
@@ -58,10 +60,13 @@
 
 
 
+          <input type="submit" name="submit" class="btn btn-primary mt-3" onclick="" value="Login"></input>
       </div>
-      <div class="modal-footer">
-        some footer
-      </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      some footer
     </div>
   </div>
+</div>
 </div>
