@@ -103,4 +103,20 @@ i.hover-fx:hover {
     transform: rotate(90deg);
     cursor: pointer;
     box-shadow: none;
+.note input,
+.note textarea {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+}
+
+.note input[disabled],
+.note textarea[disabled] {
+    color: white;
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+}
+
+input.has-error::placeholder {
+    color: red;
 }
