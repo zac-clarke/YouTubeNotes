@@ -12,7 +12,7 @@ if (!$loggedin) {
     require_once "incl/parts/login.php";
     require_once "incl/parts/signup.php";
 } else {
-    // require_once "incl/parts/add-edit-video.php";
+    // require_once "incl/parts/add-edit-notes.php";
 }
 
 ?>

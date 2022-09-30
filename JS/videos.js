@@ -63,7 +63,10 @@ function addVideo() {
       method: "POST",
       url: "api/_videos.php",
       dataType: "json",
-      data: { url: $url.val(), title: $title.val() },
+      data: {
+        url: $url.val(),
+        title: $title.val()
+      },
       error: function (xhr, textStatus, errorThrown) {
         $feedback.text(`An error occured while trying to add video`);
         $feedback.addClass("text-danger");
@@ -155,9 +158,9 @@ function displayOrUpdateVideo(video, $video = null) {
   $video.attr("data-id", `${video.id}`);
   $video.removeClass("d-none");
   $title.text(video.title);
-  $date.text(video.trn_date.substring(0,10));
+  $date.text(video.trn_date.substring(0, 10));
   $thumb.attr("src", `https://img.youtube.com/vi/${video.yt_id}/hqdefault.jpg`);
-  $link.attr("href", `video.php?videoid=${video.id}`);
+  $link.attr("href", `notes.php?videoid=${video.id}`);
   $editBtn.attr("data-id", `${video.id}`);
   $deleteBtn.attr("data-id", `${video.id}`);
 
@@ -254,7 +257,7 @@ function resetForm() {
   $title.removeAttr('disabled');
 }
 
-function disableForm () {
-  $url.attr('disabled','disabled');
-  $title.attr('disabled','disabled');
+function disableForm() {
+  $url.attr('disabled', 'disabled');
+  $title.attr('disabled', 'disabled');
 }

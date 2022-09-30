@@ -1,5 +1,5 @@
 <!-- Modal -->
-<?php require_once "incl/logic/add-edit-video.php"; 
+<?php require_once "incl/logic/add-edit-notes.php"; 
 ?>
 
 <div class="modal" id="add-video-modal" tabindex="-1" aria-labelledby="AddVideoPopup" aria-hidden="true">

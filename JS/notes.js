@@ -165,8 +165,8 @@ function addNoteBox(note) {
     let html =
         `
         <div id="note${note.id}" class="accordion-item note mb-4">
-            <div class="accordion-header" id="video-1">
-                <button class="accordion-button py-2" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+            <div class="accordion-header" id="video-${note.id}">
+                <button class="accordion-button py-2" type="button" data-bs-toggle="collapse" data-bs-target="#noteDesc${note.id}" aria-expanded="false" aria-controls="noteDesc${note.id}">
                     <div class="w-100">
                         <input class="h5 mb-1 w-100 fs-5 fw-bold form-control px-0" name="title${note.id}" type="text" value="${note.title}" placeholder="Note Title" disabled><br>
                         <small class="d-flex flex-row flex-md-column">
@@ -178,7 +178,7 @@ function addNoteBox(note) {
                 </button>
                
             </div>
-            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="video-1">
+            <div id="noteDesc${note.id}" class="accordion-collapse collapse show" aria-labelledby="video-1">
                 <div class="accordion-body">
                     <textarea class="form-control w-100 px-0" name="note${note.id}" type="text" placeholder="Note" oninput="calcTextAreaHeight(${note.id});" disabled>${note.note}</textarea>
                 </div>
@@ -294,7 +294,7 @@ function saveEdit(id, timestamp) {
  * @param {Number} id 
  */
 function cancelEdit(id) {
-    if (!editing.get(id)) {
+    if (!editing.has(id)) {
         let divID = '#note' + id;
         let fieldTitle = $(`${divID} input`);
         let fieldNote = $(`${divID} textarea`);

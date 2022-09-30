@@ -1,7 +1,7 @@
 <?php
 require("config/db-pdo.php");
 require("incl/parts/header.php");
-require("incl/logic/video.php"); // The main logic behind the Notes page
+require("incl/logic/notes.php"); // The main logic behind the Notes page
 ?>
 
 <!-- Modal for the 'Notes' button -->
