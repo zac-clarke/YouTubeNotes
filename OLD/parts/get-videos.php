@@ -6,11 +6,11 @@
         <?php foreach ($videos as $video) : ?>
             <div class="video" style="width:250px;">
                 <h5><?= $video['title'] ?></h5>
-                <a href="video.php?id=<?= $video['id'] ?>"><img src="https://img.youtube.com/vi/<?=$video['yt_id']?>/hqdefault.jpg" alt="" class="img-fluid"></a>
-                        <a href="video.php?id=<?= $video['id'] ?>"><i class="btn fa-brands fa-youtube text-info"></i></a>
+                <a href="notes.php?id=<?= $video['id'] ?>"><img src="https://img.youtube.com/vi/<?=$video['yt_id']?>/hqdefault.jpg" alt="" class="img-fluid"></a>
+                        <a href="notes.php?id=<?= $video['id'] ?>"><i class="btn fa-brands fa-youtube text-info"></i></a>
                         <i data-id="<?=$video['id']?>" class="btn edit_video fa-solid fa-pen-to-square text-warning" data-bs-toggle="modal" data-bs-target="#add-video-modal"></i>
                         <!-- TODO : Add delete confirmation modal -->
-                        <a href="incl/logic/delete-video.php?id=<?= $video['id'] ?>"><i class="btn fa-solid fa-trash text-danger"></i></a>
+                        <a href="incl/logic/delete-notes.php?id=<?= $video['id'] ?>"><i class="btn fa-solid fa-trash text-danger"></i></a>
                     </p>
             </div>
         <?php endforeach ?>

@@ -165,7 +165,7 @@ function addNoteBox(note) {
     let html =
         `
         <div id="note${note.id}" class="accordion-item note mb-4">
-            <div class="accordion-header" id="video-1">
+            <div class="accordion-header" id="video-${note.id}">
                 <button class="accordion-button py-2" type="button" data-bs-toggle="collapse" data-bs-target="#noteDesc${note.id}" aria-expanded="false" aria-controls="noteDesc${note.id}">
                     <div class="w-100">
                         <input class="h5 mb-1 w-100 fs-5 fw-bold form-control px-0" name="title${note.id}" type="text" value="${note.title}" placeholder="Note Title" disabled><br>
@@ -194,9 +194,6 @@ function addNoteBox(note) {
     $('#notes')
         .prepend(html);
     calcTextAreaHeight(note.id);
-    $(`#noteDesc${note.id}`).on('hidden.bs.collapse', function () {
-        cancelEdit(note.id);
-    });
 }
 
 /** @type {Map} Keeps track of each note being edited. Throttles it and stores initial values in case of a cancel*/
@@ -297,7 +294,7 @@ function saveEdit(id, timestamp) {
  * @param {Number} id 
  */
 function cancelEdit(id) {
-    if (!editing.get(id)) {
+    if (!editing.has(id)) {
         let divID = '#note' + id;
         let fieldTitle = $(`${divID} input`);
         let fieldNote = $(`${divID} textarea`);

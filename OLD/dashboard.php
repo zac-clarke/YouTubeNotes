@@ -23,7 +23,7 @@ if (!$loggedin) {
             Add a new Video
         </button>
 
-        <?php require_once "incl/parts/add-edit-video.php"; ?>
+        <?php require_once "incl/parts/add-edit-notes.php"; ?>
         
     </div>
     <div class="container my-5">

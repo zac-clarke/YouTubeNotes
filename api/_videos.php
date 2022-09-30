@@ -1,34 +1,42 @@
 <?php
-require_once("../config/db-pdo.php");
-require_once("../config/constants.php");
-require_once("../incl/logic/auth.php");
-require_once("../incl/logic/sanitize.php");
+require_once "../config/db-pdo.php";
+require_once "../config/constants.php";
+require_once "../incl/logic/auth.php";
+require_once "../incl/logic/sanitize.php";
 
 $response = array();
 try {
-    if (!$loggedin)
+    if (!$loggedin) {
         throw new Exception('Unauthorized!', 401);
+    }
+
     switch ($_SERVER['REQUEST_METHOD']) { // Check which request method was used. Get/Post/Put/Delete/...
         case 'GET':
-            if (!empty($_GET['id']))
+            if (!empty($_GET['id'])) {
                 $response["video"] = getUserVideo($_GET['id']);
-            else
+            } else {
                 $response["videos"] = getUserVideos();
+            }
+
             break;
         case 'POST':
             $response["video"] = addVideo();
             break;
         case 'PUT':
-            if (empty($_REQUEST['id']))
+            if (empty($_REQUEST['id'])) {
                 throw new Exception('Missing Parameters Random', 422);
-            else
+            } else {
                 $response["video"] = editVideo();
+            }
+
             break;
         case 'DELETE':
-            if (!empty($_REQUEST['id']))
+            if (!empty($_REQUEST['id'])) {
                 $response["success"] = deleteVideo();
-            else
+            } else {
                 throw new Exception('Missing Parameters', 422);
+            }
+
             break;
     }
 } catch (Exception $e) {
@@ -43,8 +51,6 @@ try {
     echo json_encode($response, JSON_PRETTY_PRINT);
 }
 
-
-
 //CRUD FUNCTIONS
 function getUserVideo($id)
 {
@@ -52,15 +58,16 @@ function getUserVideo($id)
     $id = sanitize($id);
     $userid = $_SESSION['user_id'];
 
-
     $stmt = $pdo->prepare("SELECT * FROM videos WHERE id=? AND userid=?;");
     //if query is executed successfully AND a video is found
-    if ($stmt->execute([$id, $userid]) && $stmt->rowCount() === 1)
+    if ($stmt->execute([$id, $userid]) && $stmt->rowCount() === 1) {
         return $stmt->fetchObject();
-    else if ($stmt->execute([$id, $userid]) && $stmt->rowCount() > 1)
+    } else if ($stmt->execute([$id, $userid]) && $stmt->rowCount() > 1) {
         throw new Exception("There is more than one video with this id($id)", 204);
-    else
+    } else {
         throw new Exception("Video id($id) does not exist", 204);
+    }
+
 }
 
 function getUserVideos()
@@ -69,10 +76,12 @@ function getUserVideos()
     $userid = $_SESSION['user_id'];
     $stmt = $pdo->prepare("SELECT * FROM videos WHERE userid=? ORDER BY trn_date ASC;");
     //if query is executed successfully AND at least one video is found
-    if ($stmt->execute([$userid]) && $stmt->rowCount())
+    if ($stmt->execute([$userid]) && $stmt->rowCount()) {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    else
+    } else {
         throw new Exception('No Videos found', 204);
+    }
+
 }
 
 function addVideo()
@@ -81,15 +90,17 @@ function addVideo()
     $userid = $_SESSION['user_id'];
     $title = sanitize($_POST['title']);
     $url = sanitize($_POST['url']);
-    $yt_id =  extract_id(VIDEO_URL_REGEX, $url);
+    $yt_id = extract_id(VIDEO_URL_REGEX, $url);
     $valid = $valid = validateVideoinputs($url, $title);
 
     if ($valid) {
         $stmt = $pdo->prepare("INSERT INTO videos (userid, title, url, yt_id) VALUES (?,?,?,?)");
         if ($stmt->execute([$userid, $title, $url, $yt_id]) && $stmt->rowCount()) {
             return getUserVideo($pdo->lastInsertId());
-        } else
+        } else {
             throw new Exception('Unable to add Video', 400);
+        }
+
     } else {
         throw new Exception('Input Failed validation', 422);
     }
@@ -102,16 +113,18 @@ function editVideo()
     $userid = $_SESSION['user_id'];
     $title = sanitize($_REQUEST['title']);
     $url = sanitize($_REQUEST['url']);
-    $yt_id =  extract_id(VIDEO_URL_REGEX, $url);
+    $yt_id = extract_id(VIDEO_URL_REGEX, $url);
     $valid = validateVideoinputs($url, $title);
 
     if ($valid) {
         $stmt = $pdo->prepare("UPDATE videos SET title=?, url=?, yt_id=? WHERE id=? AND  userid=?");
-       
+
         if ($stmt->execute([$title, $url, $yt_id, $id, $userid])) {
             return getUserVideo($id);
-        } else
-            throw new Exception('Unable to update video', 400); 
+        } else {
+            throw new Exception('Unable to update video', 400);
+        }
+
     } else {
         throw new Exception('Input Failed validation', 422);
     }
@@ -122,14 +135,16 @@ function deleteVideo()
     global $pdo;
     $id = sanitize($_GET['id']);
 
-    $stmt = $pdo->prepare("DELETE FROM videos WHERE id=?;");
-    if ($stmt->execute([$id]) && $stmt->rowCount() > 0)
+    //TODO : If notes found for video, get the user to confirm if they want to delete the video
+    $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, 1);
+    $stmt = $pdo->prepare("DELETE FROM notes WHERE videoid=?; DELETE FROM videos WHERE id=?;");
+    if ($stmt->execute([$id, $id]) && $stmt->rowCount() > 0) {
         return $stmt->rowCount();
-    else
+    } else {
         throw new Exception("Video id($id) not deleted! Video does not exist.", 204);
+    }
+
 }
-
-
 
 //HELPER FUNCTIONS
 
