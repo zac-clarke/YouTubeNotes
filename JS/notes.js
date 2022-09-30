@@ -167,9 +167,13 @@ function addNoteBox(note) {
         <div id="note${note.id}" class="accordion-item note mb-4">
             <div class="accordion-header" id="video-1">
                 <button class="accordion-button py-2" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
-                    <div>
-                        <input class="h5 mb-1" name="title${note.id}" type="text" value="${note.title}" placeholder="Note Title" disabled><br>
-                        <small>${convertSecondsToString(note.timestamp)} &nbsp; | &nbsp; ${note.trn_date}</small>
+                    <div class="w-100">
+                        <input class="h5 mb-1 w-100 fs-5 fw-bold form-control px-0" name="title${note.id}" type="text" value="${note.title}" placeholder="Note Title" disabled><br>
+                        <small class="d-flex flex-row flex-md-column">
+                            <div>${convertSecondsToString(note.timestamp)} </div>
+                            <div class="d-md-none"> &nbsp;|&nbsp;</div>
+                            <div> ${note.trn_date}</div>
+                        </small>
                     </div>
                 </button>
                

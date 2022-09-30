@@ -65,15 +65,16 @@ function loadVideoSection($video)
 { ?>
     <div class="container-fluid my-5">
         <div class="row justify-content-center">
-            <div class="col col-md-10">
-                <h2 class="py-2 h4 text-start"><?= $video->title ?></h2>
+
+            <div class="col-12 col-md-6 col-xl-8">
+                <h2 class="h4 mb-3 text-start"><?= $video->title ?></h2>
                 <h4 class="d-none">TODO: Metada from Youtube API if possible</h4>
                 <!-- The <iframe> (and video player) will replace this <div> tag. -->
                 <div id="videoContainer">
                     <div id="player" data-yt-id="<?= $video->yt_id ?>"></div>
                 </div>
-                <div class="d-grid gap-2 d-md-flex justify-content-between">
-                    <button id="btn-add-note" class="btn btn-primary px-4 py-2 mt-3 mb-5" data-bs-toggle="modal" data-bs-target="#modalNote" title="Pauses the video and adds a note at the current timestamp">
+                <div class="d-grid gap-2 d-flex justify-content-between">
+                    <button id="btn-add-note" class="btn btn-primary px-4 py-2 mt-3" data-bs-toggle="modal" data-bs-target="#modalNote" title="Pauses the video and adds a note at the current timestamp">
                         Add Note
                     </button>
                     <small class="fst-italic text-muted">
@@ -81,24 +82,24 @@ function loadVideoSection($video)
                     </small>
                 </div>
             </div>
+
+
+            <div class="col-12 col-md-6 col-xl-4">
+            <?php }
+                /**
+                 * Displays the Notes section - below the 'Add Note' button
+                 */
+                function loadNotesSection($video)
+                { ?>
+                        <div class="container d-flex flex-column">
+                            <span class="h5 mt-5 flex-grow-1 text-start">Your Notes</span>
+                            <span class="text-start">Order by: <a class="fw-bold" href="javascript:void(null);" onclick="orderByTimestamp()">Timestamp</a> | <a class="fw-bold" href="javascript:void(null);" onclick="orderByDate()">Date</a></span>
+                        </div>
+                        <!-- All notes go in the following div -->
+                        <div class="accordion container mt-3" id="notes"></div>
+                    <?php
+                }
+                    ?>
+            </div>
         </div>
-
-
-
     </div>
-<?php
-}
-
-/**
- * Displays the Notes section - below the 'Add Note' button
- */
-function loadNotesSection($video)
-{ ?>
-    <div class="container d-flex">
-        <span class="h2 flex-grow-1 text-start">Your Notes</span>
-        <span class="">Order by: <a class="fw-bold" href="javascript:void(null);" onclick="orderByTimestamp()">Timestamp</a> | <a class="fw-bold" href="javascript:void(null);" onclick="orderByDate()">Date</a></span>
-    </div>
-    <!-- All notes go in the following div -->
-    <div class="accordion container mt-3" id="notes"></div>
-<?php
-}
