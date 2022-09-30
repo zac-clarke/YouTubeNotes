@@ -1,4 +1,4 @@
-<?php require "incl/parts/header.php";?>
+<?php require "incl/parts/header.php"; ?>
 <main class="px-3">
 
     <div class="mt-5">
@@ -19,7 +19,9 @@
 
         <div class="row container-sm">
             <div class=" col mb-4">
-                <img src="img/addVideo.png" alt="add video modal" width=400>
+                <div class="mb-3">
+                    <img src="img/add_sucess.png" alt="add video modal" width=400 height=220 >
+                </div>
                 <h3>Add videos!</h3>
                 <p>
                     Using a youtube link you can upload videos to your profile,
@@ -27,7 +29,9 @@
                 </p>
             </div>
             <div class=" col mb-4">
-                <img src="img/video-placeholder.jpg" width=400 height=242>
+                <div class="mb-3">
+                    <img src="img/collection.png" width=400 height=220>
+                </div>
                 <h3>Add notes to videos!</h3>
                 <p>
                     You will be able to add a notes to videos! This not will
@@ -35,7 +39,9 @@
                 </p>
             </div>
             <div class=" col mb-4">
-                <img src="img/video-placeholder.jpg" width=400 height=242>
+                <div class="mb-3">
+                    <img src="img/notes.png" width=400 height=220>
+                </div>
                 <h3>Review your notes!</h3>
                 <p>
                     All notes will be saved with the video you took them during. you will be able to review
@@ -44,16 +50,22 @@
             </div>
         </div>
     </div>
-    <?php if (!$loggedin): ?>
-    <div class="container mb-5 mt-5">
-        <h3>Sign up now!</h3>
-        <a class="btn btn-primary" href="#" id="btn_signup" data-bs-toggle="modal" data-bs-target="#signup">Signup</a>
-    </div>
-    <?php else: ?>
-    <div class="container mb-5 mt-5">
-        <h3>Let's get started'!</h3>
-        <a class="btn btn-primary" href="dashboard.php">Add Videos</a>
-    </div>
-    <?php endif;?>
+    <?php if (!$loggedin) : ?>
+        <div class="container mb-5 mt-5">
+            <div class="mb-4">
+                <h3>Sign up now!</h3>
+            </div>
+            <a class="btn btn-primary" href="#" id="btn_signup" data-bs-toggle="modal" data-bs-target="#signup">Signup</a>
+        </div>
+    <?php else : ?>
+        <div class="container mb-5 mt-5">
+            <div class="mb-4">
+                <h3>Let's get started!</h3>
+            </div>
+            <div>
+                <a class="btn btn-primary" href="dashboard.php">Go to dashboard</a>
+            </div>
+        </div>
+    <?php endif; ?>
 </main>
-<?php require "incl/parts/footer.php";?>
+<?php require "incl/parts/footer.php"; ?>
