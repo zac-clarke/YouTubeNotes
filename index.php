@@ -20,7 +20,7 @@
         <div class="row container-sm">
             <div class=" col mb-4">
                 <div class="mb-3">
-                    <img src="img/add_sucess.png" alt="add video modal" width=400 height=220 >
+                    <img src="img/collection.jpg" class="img-shadow" alt="add video modal" width=400 height=250 >
                 </div>
                 <h3>Add videos!</h3>
                 <p>
@@ -30,7 +30,7 @@
             </div>
             <div class=" col mb-4">
                 <div class="mb-3">
-                    <img src="img/collection.png" width=400 height=220>
+                    <img src="img/notes.jpg" class="img-shadow" width=400 height=250>
                 </div>
                 <h3>Add notes to videos!</h3>
                 <p>
@@ -40,7 +40,7 @@
             </div>
             <div class=" col mb-4">
                 <div class="mb-3">
-                    <img src="img/notes.png" width=400 height=220>
+                    <img src="img/review.jpg" class="img-shadow" width=400 height=250>
                 </div>
                 <h3>Review your notes!</h3>
                 <p>
