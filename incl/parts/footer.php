@@ -1,5 +1,5 @@
-    <footer class="mt-auto">
-        <p>Jaz </p>
+    <footer class="mt-auto pt-4">
+        <p>Jaz &#169;2022</p>
     </footer>
 </div>
 

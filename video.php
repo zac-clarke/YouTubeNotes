@@ -63,7 +63,7 @@ function showErrorNoVideoMatch($msg)
  */
 function loadVideoSection($video)
 { ?>
-    <div class="container my-5">
+    <div id="videoContainer" class="container my-5">
         <h2 class="py-2 h4 text-start"><?= $video->title ?></h2>
         <h4 class="d-none">TODO: Metada from Youtube API if possible</h4>
         <!-- The <iframe> (and video player) will replace this <div> tag. -->

@@ -1,18 +1,17 @@
 /*Global Colors*/
 
 :root {
-    --main-bg-color-light:#E8E8E8;
-    --main-bg-color-dark:#ffffff1a;
+    --main-bg-color-light: #e8e8e8;
+    --main-bg-color-dark: #ffffff1a;
 
-    --color-edit:#d8c112;
-    --color-cancel:#d46f44;
-    --color-delete:#d46f44;
-    --color-confirm:#29c947;
-    --color-play:#246bbc;
+    --color-edit: #d8c112;
+    --color-cancel: #d46f44;
+    --color-delete: #d46f44;
+    --color-confirm: #29c947;
+    --color-play: #246bbc;
 
-    --color-error:red;
-  }
-
+    --color-error: red;
+}
 
 /* Dashboard */
 
@@ -24,39 +23,45 @@
     margin: -10% 0;
 }
 
-
-
 /* Image effect */
 .shine div {
-	position: relative;
+    position: relative;
 }
 .shine div::before {
-	position: absolute;
-	top: 0;
-	left: -75%;
-	z-index: 2;
-	display: block;
-	content: '';
-	width: 50%;
-	height: 100%;
-	background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(255,255,255,.3) 100%);
-	background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,.3) 100%);
-	-webkit-transform: skewX(-25deg);
-	transform: skewX(-25deg);
+    position: absolute;
+    top: 0;
+    left: -75%;
+    z-index: 2;
+    display: block;
+    content: "";
+    width: 50%;
+    height: 100%;
+    background: -webkit-linear-gradient(
+        left,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.3) 100%
+    );
+    background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.3) 100%
+    );
+    -webkit-transform: skewX(-25deg);
+    transform: skewX(-25deg);
 }
 .shine div:hover::before {
-	-webkit-animation: shine .75s;
-	animation: shine .75s;
+    -webkit-animation: shine 0.75s;
+    animation: shine 0.75s;
 }
 @-webkit-keyframes shine {
-	100% {
-		left: 125%;
-	}
+    100% {
+        left: 125%;
+    }
 }
 @keyframes shine {
-	100% {
-		left: 125%;
-	}
+    100% {
+        left: 125%;
+    }
 }
 
 /*Icon effects*/
@@ -93,12 +98,12 @@ i.jaz-btn-icon.btn-edit {
     background-color: var(--color-edit);
 }
 
-i.jaz-btn-icon.btn-edit:hover{
+i.jaz-btn-icon.btn-edit:hover {
     color: var(--color-edit);
 }
 
 i.jaz-btn-icon.btn-edit:after {
-    border-color:  var(--color-edit);
+    border-color: var(--color-edit);
 }
 
 i.jaz-btn-icon.btn-delete {
@@ -118,7 +123,7 @@ i.jaz-btn-icon.btn-cancel {
 }
 
 i.jaz-btn-icon.btn-cancel:hover {
-    color: var(--color-cancel)
+    color: var(--color-cancel);
 }
 
 i.jaz-btn-icon.btn-cancel:after {
@@ -147,7 +152,6 @@ i.jaz-btn-icon.btn-play:hover {
 i.jaz-btn-icon.btn-play:after {
     border-color: var(--color-play);
 }
-
 
 i.jaz-btn-icon:hover {
     background-color: transparent;
@@ -195,4 +199,24 @@ body.text-bg-dark .note textarea {
     color: white;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 5px;
+}
+
+/* Youtube Player */
+#videoContainer {
+    position: relative;
+    padding-bottom: 56.25%;
+    padding-top: 30px;
+    margin-top: 32px;
+    height: 0;
+    overflow: hidden;
+}
+
+#videoContainer iframe,
+#videoContainer object,
+#videoContainer embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }

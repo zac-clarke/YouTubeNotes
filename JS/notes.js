@@ -64,7 +64,7 @@ function calcTextAreaHeight(id) {
     if (lines > rows)
         rows = lines;
     $textarea
-        .prop('cols', cols)
+        //.prop('cols', cols)
         .prop('rows', rows > 10 ? 10 :
             rows < 1 ? 1 :
             rows);
@@ -145,7 +145,7 @@ function getNotesFromDb(order) {
         success: function ( /** @type {String} */ data, textStatus, xhr) {
             if (xhr.status == 204)
                 return $('#notes')
-                    .html('<h6 class="no-notes">You don\'t have any notes yet!<br>Click the button above to add one.</h6>')
+                    .html('<h6 class="no-notes">You don\'t have any notes yet!</h6>')
             $('#notes')
                 .html('') // Empty the div
                 .removeClass('text-warning');
@@ -386,8 +386,8 @@ function showYoutubePlayer() {
 function onYouTubeIframeAPIReady() {
     let ytId = $('#player').data('yt-id');
     player = new YT.Player('player', {
-        height: window.screen.height * 0.55,
-        width: window.screen.width * 0.7,
+        height: 440,
+        width: 600,
         videoId: ytId,
         playerVars: {
             'playsinline': 1
